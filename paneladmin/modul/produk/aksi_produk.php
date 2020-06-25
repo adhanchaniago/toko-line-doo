@@ -58,6 +58,13 @@ $act = $_GET['act'];
 $id = @$_GET['id'];
 
 if($act === 'hapus') {
+	$brgH = mysqli_query($conn, "SELECT * FROM tb_barang WHERE kd_barang = $id") or die(mysqli_error($conn));
+	$rowH = mysqli_fetch_assoc($brgH);
+	$f = $rowH['foto'];
+	if(file_exists('img/' . $f)) {
+		unlink('img/' . $f);
+	}
+	
 	$query = mysqli_query($conn, "DELETE FROM tb_barang WHERE kd_barang = $id") or die(mysqli_error($conn));
 	if($query) {
 		echo "<script>alert('Data Berhasil Dihapus.');window.location='../../media.php?p=produk';</script>";
@@ -72,6 +79,8 @@ if($act === 'hapus') {
 	$jumlah = htmlspecialchars($_POST['jumlah']);
 	$tgl_masuk = htmlspecialchars($_POST['tgl_masuk']);
 	$hrg_jual = htmlspecialchars($_POST['hrg_jual']);
+	$terjual = htmlspecialchars($_POST['terjual']);
+	$headline = htmlspecialchars($_POST['headline']);
 
 	// cek gambar
 	$namaFoto = $_FILES['foto']['name'];
@@ -91,7 +100,7 @@ if($act === 'hapus') {
 
 	move_uploaded_file($tmpFoto, 'img/' . $namaFileBaru);
 
-	$query = "INSERT INTO tb_barang (nama, id_kategori, deskripsi, jumlah, tgl_masuk, hrg_jual, foto) VALUES ('$nama', '$id_kategori', '$deskripsi', '$jumlah', '$tgl_masuk', '$hrg_jual', '$namaFileBaru')";
+	$query = "INSERT INTO tb_barang (nama, id_kategori, deskripsi, jumlah, headline,  tgl_masuk, hrg_jual, terjual, foto) VALUES ('$nama', '$id_kategori', '$deskripsi', '$jumlah', '$headline', '$tgl_masuk', '$hrg_jual', '$terjual', '$namaFileBaru')";
 	mysqli_query($conn, $query) or die(mysqli_error($conn));
 	if($query) {
 		echo "<script>alert('Data Berhasil Ditambahkan.');window.location='../../media.php?p=produk';</script>";

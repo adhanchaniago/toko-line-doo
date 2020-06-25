@@ -8,6 +8,8 @@ function editBrg() {
 	$jumlah = htmlspecialchars($_POST['jumlah']);
 	$tgl_masuk = htmlspecialchars($_POST['tgl_masuk']);
 	$hrg_jual = htmlspecialchars($_POST['hrg_jual']);
+	$terjual = htmlspecialchars($_POST['terjual']);
+	$headline = htmlspecialchars($_POST['headline']);
 	$fotoLama = $_POST['fotoLama'];
 
 	// cek gambar
@@ -23,8 +25,10 @@ function editBrg() {
 							id_kategori = '$id_kategori',
 							deskripsi = '$deskripsi',
 							jumlah = '$jumlah',
+							headline = '$headline',
 							tgl_masuk = '$tgl_masuk',
 							hrg_jual = '$hrg_jual',
+							terjual = '$terjual',
 							foto = '$foto'
 							WHERE kd_barang = $kd_barang
 						";
@@ -72,4 +76,8 @@ function upload() {
 
 	move_uploaded_file($tmpName, "img/" . $namaFileBaru);
 	return $namaFileBaru;
+}
+
+function yn($data) {
+	return $data == "Y" ? "Ya" : "Tidak";
 }

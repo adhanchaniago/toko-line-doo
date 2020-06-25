@@ -74,11 +74,13 @@ session_start();
                 <th>Harga</th>
                 <th>Tanggal Masuk</th>
                 <th>Jumlah</th>
+                <th>Headline</th>
                 <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
               <?php 
+              require_once 'function.php';
               $no = 1;
               $sql = mysqli_query($conn, "SELECT * FROM tb_barang ORDER BY nama ASC") or die(mysqli_error($conn));
               while($row = mysqli_fetch_assoc($sql)) { ?>
@@ -97,6 +99,7 @@ session_start();
                <td><?= number_format($row['hrg_jual']); ?></td>
                <td><?= date('d-M-Y', strtotime($row['tgl_masuk'])) ; ?></td>
                <td><?= $row['jumlah']; ?></td>
+               <td><?= yn($row['headline']); ?></td>
                <td colspan="2">
                  <a href="?p=produk&aksi=edit&id=<?= $row['kd_barang']; ?>" class="btn btn-info">Edit</a>
                  <!-- <button type="button" class="btn btn-info">Edit</button> -->
@@ -151,6 +154,13 @@ case 'tambah' :
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="col-sm-2 col-sm-2 control-label">Headline</label>
+                  <div class="col-sm-10">
+                      <input type="radio" name="headline" value="Y"> Ya
+                      <input type="radio" name="headline" value="T"> Tidak
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="control-label col-sm-2 col-sm-2">Tanggal Masuk</label>
                   <div class="col-sm-3">
                     <input class="form-control form-control-inline input-medium" name="tgl_masuk" type="date" value="">
@@ -161,6 +171,12 @@ case 'tambah' :
                   <label class="col-sm-2 col-sm-2 control-label">Harga</label>
                   <div class="col-sm-10">
                     <input class="form-control" id="harga" name="hrg_jual" type="text">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 col-sm-2 control-label">Terjual</label>
+                  <div class="col-sm-10">
+                    <input class="form-control" id="terjual" name="terjual" type="text">
                   </div>
                 </div>
                 <div class="form-group">
@@ -251,6 +267,13 @@ $se = mysqli_fetch_assoc($sql_edit);
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="col-sm-2 col-sm-2 control-label">Headline</label>
+                  <div class="col-sm-10">
+                      <input type="radio" name="headline" value="Y" <?php if($se['headline'] == 'Y') echo 'checked'?>> Ya
+                      <input type="radio" name="headline" value="T" <?php if($se['headline'] == 'T') echo 'checked'?>> Tidak
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="control-label col-sm-2 col-sm-2">Tanggal Masuk</label>
                   <div class="col-sm-3">
                     <input class="form-control form-control-inline input-medium" name="tgl_masuk" type="date" value="<?= $se['tgl_masuk']; ?>">
@@ -264,20 +287,26 @@ $se = mysqli_fetch_assoc($sql_edit);
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="col-sm-2 col-sm-2 control-label">Terjual</label>
+                  <div class="col-sm-10">
+                    <input class="form-control" id="terjual" name="terjual" type="text" value="<?= $se['terjual']; ?>">
+                  </div>
+                </div>
+                <!-- <div class="form-group">
                   <label class="control-label col-md-3">Default</label>
                   <div class="col-md-4">
                     <input type="text" name="fotoLama" value="<?= $se['foto']; ?>">
                     <input type="file" class="default" name="foto">
                     <img src="modul/produk/img/<?= $se['foto']; ?>" width="100">
                   </div>
-                </div>
-                <!-- <div class="form-group">
+                </div> -->
+                <div class="form-group">
                   <label class="col-sm-2 col-sm-2 control-label">Foto</label>
                   <div class="col-md-9">
                     <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;"> -->
+                      <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
                         <!-- <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" alt="" /> -->
-                        <!-- <img src="modul/produk/img/<?= $se['foto']; ?>">
+                        <img src="modul/produk/img/<?= $se['foto']; ?>">
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
@@ -297,7 +326,7 @@ $se = mysqli_fetch_assoc($sql_edit);
                       Safari and Internet Explorer 10 only
                       </span>
                   </div>
-                </div> -->
+                </div>
                 <div class="form-group">
                   <div class="col-sm-2"></div>
                   <div class="col-sm-10">
