@@ -1,9 +1,47 @@
 <?php
+function editBrg() {
+	global $conn;
+	$kd_barang = $_POST['kd_barang'];
+	$nama = htmlspecialchars($_POST['nama_produk']);
+	$id_kategori = htmlspecialchars($_POST['id_kategori']);
+	$deskripsi = htmlspecialchars($_POST['deskripsi']);
+	$jumlah = htmlspecialchars($_POST['jumlah']);
+	$tgl_masuk = htmlspecialchars($_POST['tgl_masuk']);
+	$hrg_jual = htmlspecialchars($_POST['hrg_jual']);
+	$fotoLama = $_POST['fotoLama'];
+
+	// cek gambar
+	// cek gambar
+	if($_FILES['foto']['error'] === 4) {
+		$foto = $fotoLama;
+	} else {
+		$foto = upload();
+	}
+
+	$query = "UPDATE tb_barang SET
+							nama = '$nama',
+							id_kategori = '$id_kategori',
+							deskripsi = '$deskripsi',
+							jumlah = '$jumlah',
+							tgl_masuk = '$tgl_masuk',
+							hrg_jual = '$hrg_jual',
+							foto = '$foto'
+							WHERE kd_barang = $kd_barang
+						";
+	mysqli_query($conn, $query) or die(mysqli_error($conn));
+	return mysqli_affected_rows($conn);
+}
+
 function upload() {
 	$namaFile = $_FILES['foto']['name'];
 	$ukuranFile = $_FILES['foto']['size'];
 	$error = $_FILES['foto']['error'];
 	$tmpName = $_FILES['foto']['tmp_name'];
+
+	// if($error === 4) {
+	// 	echo "<script>alert('pilih gambar terlebih dahulu.')</script>";
+	// 	return false;
+	// }
 
 	$ektensiGambarValid = ['jpg', 'jpeg', 'png'];
 	$ektensiGambar = explode('.', $namaFile);

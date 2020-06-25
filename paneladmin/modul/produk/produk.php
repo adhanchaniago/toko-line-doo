@@ -95,7 +95,7 @@ session_start();
                
                <td><?= $ktg['nama_kategori']; ?></td>
                <td><?= number_format($row['hrg_jual']); ?></td>
-               <td><?= date('d-m-Y', strtotime($row['tgl_masuk'])) ; ?></td>
+               <td><?= date('d-M-Y', strtotime($row['tgl_masuk'])) ; ?></td>
                <td><?= $row['jumlah']; ?></td>
                <td colspan="2">
                  <a href="?p=produk&aksi=edit&id=<?= $row['kd_barang']; ?>" class="btn btn-info">Edit</a>
@@ -264,12 +264,20 @@ $se = mysqli_fetch_assoc($sql_edit);
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="control-label col-md-3">Default</label>
+                  <div class="col-md-4">
+                    <input type="text" name="fotoLama" value="<?= $se['foto']; ?>">
+                    <input type="file" class="default" name="foto">
+                    <img src="modul/produk/img/<?= $se['foto']; ?>" width="100">
+                  </div>
+                </div>
+                <!-- <div class="form-group">
                   <label class="col-sm-2 col-sm-2 control-label">Foto</label>
                   <div class="col-md-9">
                     <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                      <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;"> -->
                         <!-- <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" alt="" /> -->
-                        <img src="modul/produk/img/<?= $se['foto']; ?>">
+                        <!-- <img src="modul/produk/img/<?= $se['foto']; ?>">
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
@@ -289,11 +297,11 @@ $se = mysqli_fetch_assoc($sql_edit);
                       Safari and Internet Explorer 10 only
                       </span>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group">
                   <div class="col-sm-2"></div>
                   <div class="col-sm-10">
-                    <button type="submit" class="btn btn-theme">Ubah Data</button>
+                    <button type="submit" name="ubah" class="btn btn-theme">Ubah Data</button>
                   </div>
                 </div>
               </form>

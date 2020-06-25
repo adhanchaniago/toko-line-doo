@@ -38,6 +38,8 @@
     require_once 'home.php';
   } else if($_GET['p'] == 'produk') {
     require_once 'modul/produk/produk.php';
+  } else if($_GET['p'] == 'kategori') { 
+    require_once 'modul/kategori/kategori.php';
   } else {
     require_once '404.php';
   }

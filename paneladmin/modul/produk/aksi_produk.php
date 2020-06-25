@@ -1,10 +1,12 @@
 <?php  
 session_start();
+
 if(empty($_SESSION['username']) && empty($_SESSION['passuser'])) {
 
 
 
 ?>
+32:35
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,43 +102,49 @@ if($act === 'hapus') {
 
 } else if($_GET['act'] == 'edit') {
 	require_once 'function.php';
-	$kd_barang = $_POST['kd_barang'];
-	$nama = htmlspecialchars($_POST['nama_produk']);
-	$id_kategori = htmlspecialchars($_POST['id_kategori']);
-	$deskripsi = htmlspecialchars($_POST['deskripsi']);
-	$jumlah = htmlspecialchars($_POST['jumlah']);
-	$tgl_masuk = htmlspecialchars($_POST['tgl_masuk']);
-	$hrg_jual = htmlspecialchars($_POST['hrg_jual']);
-	$fotoLama = $_POST['fotoLama'];
+		if(editBrg() > 0) {
+			echo "<script>alert('Data Berhasil Diubah.');window.location='../../media.php?p=produk';</script>";
+		} else {
+			echo "<script>alert('Data Gagal Diubah.');window.location='../../media.php?p=produk';</script>";
+		}
+
+	// $kd_barang = $_POST['kd_barang'];
+	// $nama = htmlspecialchars($_POST['nama_produk']);
+	// $id_kategori = htmlspecialchars($_POST['id_kategori']);
+	// $deskripsi = htmlspecialchars($_POST['deskripsi']);
+	// $jumlah = htmlspecialchars($_POST['jumlah']);
+	// $tgl_masuk = htmlspecialchars($_POST['tgl_masuk']);
+	// $hrg_jual = htmlspecialchars($_POST['hrg_jual']);
+	// $fotoLama = $_POST['fotoLama'];
 
 	// cek gambar
 	// cek gambar
-	if($_FILES['foto']['error'] === 4) {
-		$foto = $fotoLama;
-	} else {
-		$foto = upload();
-	}
-32:35
-	$query = "UPDATE tb_barang SET
-							nama = '$nama',
-							id_kategori = '$id_kategori',
-							deskripsi = '$deskripsi',
-							jumlah = '$jumlah',
-							tgl_masuk = '$tgl_masuk',
-							hrg_jual = '$hrg_jual',
-							foto = '$foto'
-							WHERE kd_barang = $kd_barang
-						";
-	mysqli_query($conn, $query) or die(mysqli_error($conn));
-	if($query) {
-		echo "<script>alert('Data Berhasil Diubah.');window.location='../../media.php?p=produk';</script>";
-	} else {
-		echo "<script>alert('Data Gagal Diubah.');window.location='../../media.php?p=produk';</script>";
-	}
+	// if($_FILES['foto']['error'] === 4) {
+	// 	$foto = $fotoLama;
+	// } else {
+	// 	$foto = upload();
+	// }
+
+	// $query = "UPDATE tb_barang SET
+	// 						nama = '$nama',
+	// 						id_kategori = '$id_kategori',
+	// 						deskripsi = '$deskripsi',
+	// 						jumlah = '$jumlah',
+	// 						tgl_masuk = '$tgl_masuk',
+	// 						hrg_jual = '$hrg_jual',
+	// 						foto = '$foto'
+	// 						WHERE kd_barang = $kd_barang
+	// 					";
+	// mysqli_query($conn, $query) or die(mysqli_error($conn));
+	// if($query) {
+	// 	echo "<script>alert('Data Berhasil Diubah.');window.location='../../media.php?p=produk';</script>";
+	// } else {
+	// 	echo "<script>alert('Data Gagal Diubah.');window.location='../../media.php?p=produk';</script>";
+	// }
+	// return mysqli_affected_rows($conn);
 
 
-
-	}
+ }	
 
 }
 ?>
