@@ -7,6 +7,33 @@ if(!empty($_SESSION['username']) AND !empty($_SESSION['passuser'])) {
   exit;
 }
 
+// if(isset($_POST["login"])) {
+//   $username = $_POST["username"];
+//   $password = $_POST["password"];
+
+//   // cek username, apakah ada di dalam databse
+//   $result = mysqli_query($conn, "SELECT * FROM tb_user WHERE username = '$username'");
+//   // jika nilai 1 berhasil login, kalau 0 gagal
+//   if(mysqli_num_rows($result) === 1) {
+//     // cek password
+//     $row = mysqli_fetch_assoc($result);
+//     if(password_verify($password, $row["password"])) {
+//       // set session
+//       // $_SESSION["login"] = true;
+
+//       // cek remember me
+//       // if(isset($_POST["remember"])) {
+//       //   // buat cookie
+//       //   setcookie('id', $row['id'], time() + 60);
+//       //   setcookie('key', hash('sha256', $row['username']), time()+60);
+//       // }
+
+//       header("Location: media.php?p=home");
+//       exit;
+//     }
+//   }
+// }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +84,7 @@ if(!empty($_SESSION['username']) AND !empty($_SESSION['passuser'])) {
           <div class="form-group">
             <input type="checkbox" name="remember" value="remember-me"> Ingat Saya
           </div>
-          <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> Masuk</button>
+          <button class="btn btn-theme btn-block" name="login" type="submit"><i class="fa fa-lock"></i> Masuk</button>
           <hr>
           <div class="registration">
             Belum Punya Akun?<br/>

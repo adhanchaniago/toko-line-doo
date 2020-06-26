@@ -6,7 +6,7 @@
 			while($row = mysqli_fetch_assoc($menu)) { ?>
 				<li>
 					<ul class="kid-menu">
-						<li><a href="product.html"><?= $row['nama_kategori']; ?></a></li>
+						<li><a href="product.php?id=<?= $row['id_kategori']; ?>"><?= $row['nama_kategori']; ?></a></li>
 					</ul>
 				</li>
 			<?php } ?>
@@ -32,14 +32,19 @@
 			
 			});
 		</script>
+		<?php 
+		$sidebarBrg = mysqli_query($conn, "SELECT * FROM tb_barang ORDER BY id_kategori LIMIT 1") or die(mysqli_error($conn));
+		while($row = mysqli_fetch_assoc($sidebarBrg)) { ?>
+						<br>
 					<div class="chain-grid menu-chain">
-	   		     		<a href="single.html"><img class="img-responsive chain" src="images/wat.jpg" alt=" " /></a>	   		     		
+	   		     		<a href="single.php?id=<?= $row['kd_barang']; ?>"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $row['foto']; ?>" alt=" " /></a>	   		     		
 	   		     		<div class="grid-chain-bottom chain-watch">
-		   		     		<span class="actual dolor-left-grid">300$</span>
+		   		     		<span class="actual dolor-left-grid">Rp. <?= number_format($row['hrg_jual'],2,",","."); ?></span>
 		   		     		<span class="reducedfrom">500$</span>  
-		   		     		<h6><a href="single.html">Lorem ipsum dolor</a></h6>  		     			   		     										
+		   		     		<h6><a href="single.php?id=<?= $row['kd_barang']; ?>"><?= $row['nama']; ?></a></h6>  		     			   		     										
 	   		     		</div>
 	   		     	</div>
+	   		     <?php } ?>
 	   		     	 <a class="view-all all-product" href="product.html">VIEW ALL PRODUCTS<span> </span></a> 	
 			</div>
 	   		    <div class="clearfix"> </div> 

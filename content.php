@@ -1,4 +1,8 @@
-<a href="single.html">
+<?php 
+$slideSingle = mysqli_query($conn, "SELECT * FROM tb_barang");
+$sldS = mysqli_fetch_assoc($slideSingle);
+?>
+<a href="#">
 			<div class="wrap-in">
 				
 				<div class="wmuSlider example1 slide-grid">		 
@@ -12,8 +16,8 @@
 							<img class="img-responsive " src="paneladmin/modul/produk/img/<?= $rowS['foto']; ?>" alt=" " />
 							</div>
 							<div class="col-md-7 banner-off">							
-								<h2><?= $rowS['nama']; ?></h2>
-								<label>Cuma <b>Rp. <?= number_format($rowS['hrg_jual']); ?></b></label>
+								<a href="single.php?id=<?= $rowS['kd_barang']; ?>"><h2><?= $rowS['nama']; ?></h2></a>
+								<label>Cuma <b>Rp. <?= number_format($rowS['hrg_jual'],2,",","."); ?></b></label>
 								<!-- funsi untuk menampilkan deskripsi mau berapa kata -->
 								<?php 
 									$kalimat = $rowS['deskripsi'];
@@ -32,7 +36,9 @@
 					 	
 						
 					 </div>
+
 					 </a>
+
 	                <ul class="wmuSliderPagination">
 	                	<li><a href="#" class="">0</a></li>
 	                	<li><a href="#" class="">1</a></li>
@@ -45,6 +51,7 @@
 	            </div>
 	          </div>
 	           	</a>
+
 	   		      <!---->
 	   		     <div class="shoes-grid-left">
 			<a href="single.html">				 
@@ -88,13 +95,13 @@
 							$brgterakhir = mysqli_query($conn, "SELECT * FROM tb_barang ORDER BY nama LIMIT 3") or die(mysqli_error($conn));
 							while($row = mysqli_fetch_assoc($brgterakhir)) { ?>
 	   		     	<div class="col-md-4 chain-grid">
-	   		     		<a href="single.html"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $row['foto']; ?>" alt=" " /></a>
+	   		     		<a href="single.php?id=<?= $row['kd_barang']; ?>"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $row['foto']; ?>" alt=" " /></a>
 	   		     		<span class="star"> </span>
 	   		     		<div class="grid-chain-bottom">
-	   		     			<h6><a href="single.html"><?= $row['nama']; ?></a></h6>
+	   		     			<h6><a href="single.php?id=<?= $row['kd_barang']; ?>"><?= $row['nama']; ?></a></h6>
 	   		     			<div class="star-price">
 	   		     				<div class="dolor-grid"> 
-		   		     				<span class="actual">Rp. <?= number_format($row['hrg_jual']); ?></span>
+		   		     				<span class="actual">Rp. <?= number_format($row['hrg_jual'],2,",","."); ?></span>
 		   		     				<!-- <span class="reducedfrom">400$</span> -->
 		   		     				  <span class="rating">
 									        <input type="radio" class="rating-input" id="rating-input-1-5" name="rating-input-1">
@@ -109,7 +116,7 @@
 									        <label for="rating-input-1-1" class="rating-star"> </label>
 							    	   </span>
 	   		     				</div>
-	   		     				<a class="now-get get-cart" href="#">BELI & KERANJANG BELANJA</a> 
+	   		     				<a class="now-get get-cart" href="#"><i class="fa fa-shopping-cart"></i> Tambah Di Keranjang</a> 
 	   		     				<div class="clearfix"> </div>
 							</div>
 	   		     		</div>
@@ -127,13 +134,13 @@
 							$brglaris = mysqli_query($conn, "SELECT * FROM tb_barang ORDER BY terjual DESC LIMIT 3") or die(mysqli_error($conn));
 							while($rowt = mysqli_fetch_assoc($brglaris)) { ?>
 	   		     	<div class="col-md-4 chain-grid">
-	   		     		<a href="single.html"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $rowt['foto']; ?>" alt=" " /></a>
+	   		     		<a href="single.php?id=<?= $rowt['kd_barang']; ?>"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $rowt['foto']; ?>" alt=" " /></a>
 	   		     		<span class="star"> </span>
 	   		     		<div class="grid-chain-bottom">
-	   		     			<h6><a href="single.html"><?= $rowt['nama']; ?></a></h6>
+	   		     			<h6><a href="single.php?id=<?= $rowt['kd_barang']; ?>"><?= $rowt['nama']; ?></a></h6>
 	   		     			<div class="star-price">
 	   		     				<div class="dolor-grid"> 
-		   		     				<span class="actual">Rp. <?= number_format($rowt['hrg_jual']); ?></span>
+		   		     				<span class="actual">Rp. <?= number_format($rowt['hrg_jual'],2,",","."); ?></span>
 		   		     				<!-- <span class="reducedfrom">400$</span> -->
 		   		     				  <span class="rating">
 									        <input type="radio" class="rating-input" id="rating-input-1-5" name="rating-input-1">
@@ -148,7 +155,7 @@
 									        <label for="rating-input-1-1" class="rating-star"> </label>
 							    	   </span>
 	   		     				</div>
-	   		     				<a class="now-get get-cart" href="#">ADD TO CART</a> 
+	   		     				<a class="now-get get-cart" href="#"><i class="fa fa-shopping-cart"></i> Tambah Di Keranjang</a> 
 	   		     				<div class="clearfix"> </div>
 							</div>
 	   		     		</div>

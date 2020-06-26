@@ -1248,7 +1248,8 @@ padding: 0 0 0 4.7em;
 }
 
 .left-grid-view .mask, .left-grid-view .content {
-	top: 205px;
+	/*top: 205px;*/
+	top: 149px;
 	left: 142px;
 }
 .arrow-img {

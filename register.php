@@ -1,17 +1,29 @@
+<!--A Design by W3layouts 
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
 <?php 
-session_start();
 require_once 'config/koneksi.php';
 require_once 'config/functions.php';
+
+if(isset($_POST['regis'])) {
+	if(register($_POST) > 0) {
+		echo "<script>alert('Akun Berhasil Dibuat.');window.location='paneladmin/index.php';</script>";
+	} else {
+		echo "<script>alert('Akun Gagal Dibuat.');window.location='register.php';</script>";
+	}
+}
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>TokoLineDoo | Website Jual Beli Online</title>
+<title>Buat Akun | TokoLineDoo</title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
-<link href="paneladmin/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <!--//theme-style-->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
@@ -19,7 +31,8 @@ require_once 'config/functions.php';
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
 <!--//fonts-->
 <script src="js/jquery.min.js"></script>
-<!--script-->
+
+
 </head>
 <body> 
 	<!--header-->
@@ -95,24 +108,58 @@ require_once 'config/functions.php';
 		</div>
 	</div>
 	<!---->
-	<div class="container">
-		<div class="shoes-grid">
-			<?php include 'content.php'; ?> 
-			</div>  
-			   <div class="sub-cate">
-				<?php include 'menu.php'; ?>       	         
-		</div>
-	
+	<div class="container"> 
+			         
+		<div class="register">
+		  	  <form action="" method="post"> 
+				 <div class="register-top-grid">
+					<h3>INFORMASI PRIBADI ANDA</h3>
+					<div class="mation">
+						<span>Username<label>*</label></span>
+						<input type="text" name="username" placeholder="Masukan username anda" class="form-control">
+
+						<span>Password<label>*</label></span>
+						<input type="password" name="password" class="form-control" placeholder="Masukan password anda">
+
+						<span>Konfirmasi Password<label>*</label></span>
+						<input type="password" name="password2" class="form-control" placeholder="Konfirmasi password">
+
+						<span>Nama Lengkap<label>*</label></span>
+						<input type="text" name="nama_lengkap" placeholder="Masukan nama anda" class="form-control">
+
+						<span>Email<label>*</label></span>
+						<input type="email" name="email" class="form-control" placeholder="Masukan email anda">
+
+						<span>Nomor Telepon<label>*</label></span>
+						<input type="number" name="telp" class="form-control" placeholder="Masukan telp anda">
+
+						<span>Level<label>*</label></span>
+						<input type="text" name="level" placeholder="Admin/User" class="form-control">
+
+						<span>Akses<label>*</label></span>
+						<input type="radio" name="blokir" value="Y"> Ya
+						<input type="radio" name="blokir" value="N"> Tidak
+					</div>
+					 </div>
+				<div class="register-but">
+					   <button type="submit" name="regis" class="btn btn-info">Daftar</button>
+					   <div class="clearfix"> </div>
+				</div>
+				</form>
+		   </div>
+		   <div class="sub-cate">
+				<?php include 'menu.php'; ?>     
+	</div>
 	<!---->
 	<div class="footer">
 		<div class="footer-top">
 			<div class="container">
 				<div class="latter">
-					<h6>SURAT-BERITA</h6>
+					<h6>NEWS-LETTER</h6>
 					<div class="sub-left-right">
 						<form>
-							<input type="text" value="Enter email here"onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Masukan email anda';}" />
-							<input type="submit" value="BERLANGGANAN" />
+							<input type="text" value="Enter email here"onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter email here';}" />
+							<input type="submit" value="SUBSCRIBE" />
 						</form>
 					</div>
 					<div class="clearfix"> </div>

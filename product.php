@@ -1,13 +1,26 @@
+<!--A Design by W3layouts 
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
 <?php 
 session_start();
 require_once 'config/koneksi.php';
 require_once 'config/functions.php';
 
+$idH = $_GET['id'];
+// query untuk jumlah pencarian di produk.php
+$kategoriB = "SELECT * FROM tb_barang WHERE id_kategori = $idH";
+// query untuk menampilkan kategori di bagian titile html
+$kategoriH = mysqli_query($conn, "SELECT * FROM tb_kategori WHERE id_kategori = $idH");
+$judulH = mysqli_fetch_assoc($kategoriH);
+
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>TokoLineDoo | Website Jual Beli Online</title>
+<title><?= $judulH['nama_kategori'] ?> | TokoLineDoo</title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
@@ -19,6 +32,8 @@ require_once 'config/functions.php';
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
 <!--//fonts-->
 <script src="js/jquery.min.js"></script>
+
+
 <!--script-->
 </head>
 <body> 
@@ -64,7 +79,7 @@ require_once 'config/functions.php';
 			<div class="container">
 				<div class="header-bottom-left">
 					<div class="logo">
-						<a href="index.html"><img src="images/logo.png" alt=" " /></a>
+						<a href="<?= base_url(); ?>"><img src="images/logo.png" alt=" " /></a>
 					</div>
 					<div class="search">
 						<input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}" >
@@ -83,7 +98,7 @@ require_once 'config/functions.php';
 							<?php else : ?>
 							<ul class="login">
 								<li><a href="<?= base_url('paneladmin/index.php'); ?>"><span> </span>MASUK</a></li> |
-								<li ><a href="register.php">DAFTAR</a></li>
+								<li ><a href="<?= base_url('paneladmin/index.php'); ?>">DAFTAR</a></li>
 							</ul>
 						<?php endif; ?>
 						<!-- <div class="cart"><a href="#"><span> </span>KERANJANG</a></div> -->
@@ -95,14 +110,59 @@ require_once 'config/functions.php';
 		</div>
 	</div>
 	<!---->
+	<!-- start content -->
 	<div class="container">
-		<div class="shoes-grid">
-			<?php include 'content.php'; ?> 
-			</div>  
-			   <div class="sub-cate">
-				<?php include 'menu.php'; ?>       	         
+		
+	<div class="women-product">
+		<div class=" w_content">
+			<div class="women">
+				<?php 
+				$jmlH = mysqli_num_rows(mysqli_query($conn, $kategoriB));
+				?>
+				<h4>Barang Ditemukan - <span><?= $jmlH; ?> items</span> </h4>
+				<ul class="w_nav">
+					<li>Sort : </li>
+			     	<li><a class="active" href="#">popular</a></li> |
+			     	<li><a href="#">new </a></li> |
+			     	<li><a href="#">discount</a></li> |
+			     	<li><a href="#">price: Low High </a></li> 
+			     <div class="clearfix"> </div>	
+			     </ul>
+			     <div class="clearfix"> </div>	
+			</div>
 		</div>
-	
+		<!-- grids_of_4 -->
+		<div class="grid-product">
+		<?php 
+		$id = $_GET['id'];
+		$kategori = "SELECT * FROM tb_barang WHERE id_kategori = $id";
+		$ktg = mysqli_query($conn, $kategori) or die(mysqli_error($conn));
+		while($rowT = mysqli_fetch_assoc($ktg)) {
+			
+		?>
+		  <div class="product-grid">
+			<div class="content_box"><a href="single.php?id=<?= $rowT['kd_barang']; ?>">
+			   	<div class="left-grid-view grid-view-left">
+			   	   	 <img src="paneladmin/modul/produk/img/<?= $rowT['foto']; ?>" class="img-responsive watch-right" alt=""/>
+				   	   	<div class="mask">
+	                        <div class="info">Quick View</div>
+			            </div>
+				   	  </a>
+				</div>
+				    <h5><a href="single.php?id=<?= $rowT['kd_barang']; ?>"><?= $rowT['nama']; ?></a></h5>
+				     <p>It is a long established fact that a reader</p>
+				     Rp. <?= number_format($rowT['hrg_jual'],2,",","."); ?>
+			   	</div>
+              </div>
+			 <?php }  ?>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+	<div class="sub-cate">
+				<?php require_once 'menu.php'; ?>	
+			</div>
+	<div class="clearfix"> </div>
+</div>
 	<!---->
 	<div class="footer">
 		<div class="footer-top">
@@ -111,8 +171,8 @@ require_once 'config/functions.php';
 					<h6>SURAT-BERITA</h6>
 					<div class="sub-left-right">
 						<form>
-							<input type="text" value="Enter email here"onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Masukan email anda';}" />
-							<input type="submit" value="BERLANGGANAN" />
+							<input type="text" value="Enter email here"onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter email here';}" />
+							<input type="submit" value="SUBSCRIBE" />
 						</form>
 					</div>
 					<div class="clearfix"> </div>
