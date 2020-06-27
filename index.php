@@ -137,7 +137,7 @@ require_once 'config/functions.php';
 						<?php 
 						$menu = mysqli_query($conn, "SELECT * FROM tb_kategori") or die(mysqli_error($conn));
 						while($row = mysqli_fetch_assoc($menu)) { ?>
-						<li><a href="#"><?= $row['nama_kategori']; ?></a></li>
+						<li><a href="product.php?id=<?= $row['id_kategori']; ?>"><?= $row['nama_kategori']; ?></a></li>
 						<?php } ?>
 					</ul>
 				</div>
