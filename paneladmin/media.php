@@ -45,6 +45,9 @@ if(empty($_SESSION['username']) AND empty($_SESSION['passuser'])) {
   <link rel="stylesheet" type="text/css" href="lib/bootstrap-timepicker/compiled/timepicker.css" />
   <link rel="stylesheet" type="text/css" href="lib/bootstrap-datetimepicker/datertimepicker.css" />
 
+  <!-- DataTables -->
+  <link href="assets/DataTables/datatables.min.css" rel="stylesheet" />
+
   <!-- =======================================================
     Template Name: Dashio
     Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
@@ -314,6 +317,10 @@ if(empty($_SESSION['username']) AND empty($_SESSION['passuser'])) {
   </section>
   <!-- js placed at the end of the document so the pages load faster -->
   <script src="lib/jquery/jquery.min.js"></script>
+  <script src="assets/DataTables/datatables.min.js"></script>
+  <script>
+    $('#datatables').DataTable();
+  </script>
 
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
   <script class="include" type="text/javascript" src="lib/jquery.dcjqaccordion.2.7.js"></script>
@@ -399,6 +406,7 @@ if(empty($_SESSION['username']) AND empty($_SESSION['passuser'])) {
   <script type="text/javascript" src="lib/bootstrap-daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="lib/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
   <script src="lib/advanced-form-components.js"></script>
+  
 </body>
 
 </html>

@@ -52,6 +52,7 @@
               <span>Modul Admin</span>
               </a>
             <ul class="sub">
+              <li><a href="?p=admin">User Admin</a></li>
               <li><a href="?p=customer">Customer Online</a></li>
               <li><a href="?p=rekening">Rekening Bank</a></li>
               <li><a href="?p=link">Link Terkait</a></li>

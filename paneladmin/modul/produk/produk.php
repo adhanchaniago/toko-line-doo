@@ -19,9 +19,14 @@ session_start();
   <link href="../../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!--external css-->
   <link href="../../lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+  
   <!-- Custom styles for this template -->
   <link href="../../css/style.css" rel="stylesheet">
   <link href="../../css/style-responsive.css" rel="stylesheet">
+
+  <!-- DataTables -->
+  <link href="../../assets/DataTables/datatables.min.css" rel="stylesheet" />
+
   
   <!-- =======================================================
     Template Name: Dashio
@@ -62,10 +67,24 @@ session_start();
         <div class="col-lg-12" align="right">
           <a href="<?= "?p=produk&aksi=tambah"; ?>">
         <button type="submit" class="btn btn-theme mb-1">Tambah Data Produk</button></a>
+        <a href=""></a>
+        <!-- Single button -->
+        <div class="btn-group">
+          <button type="button" class="btn btn-theme dropdown-toggle" data-toggle="dropdown">
+            Export <span class="caret"></span>
+            </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="laporan/export_pdf.php" target="_blank">Export to PDF</a></li>
+            <li class="divider"></li>
+            <li><a href="laporan/export_excel.php" target="_blank">Export to Excel</a></li>
+            <!-- <li><a href="#">Something else here</a></li> -->
+            <!-- <li><a href="#">Separated link</a></li> -->
+          </ul>
+        </div>
         </div>
         <br><br>
         <section id="unseen">
-          <table class="table table-bordered table-striped table-condensed">
+          <table class="table table-bordered table-striped table-condensed" id="datatables">
             <thead>
               <tr>
                 <th>No</th>

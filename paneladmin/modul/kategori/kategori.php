@@ -65,7 +65,7 @@ session_start();
         </div>
         <br><br>
         <section id="unseen">
-          <table class="table table-bordered table-striped table-condensed">
+          <table class="table table-bordered table-striped table-condensed" id="datatables">
             <thead>
               <tr>
                 <th>No</th>

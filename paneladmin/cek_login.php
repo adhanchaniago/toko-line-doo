@@ -45,6 +45,7 @@ if(mysqli_num_rows($result) === 1) {
 		header("Location: media.php?p=home");
 			exit;
 	}
+	echo "<script>alert('Username/Password Kamu Salah!.');window.location='index.php';</script>";
 }
 
 

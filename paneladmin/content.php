@@ -40,6 +40,8 @@
     require_once 'modul/produk/produk.php';
   } else if($_GET['p'] == 'kategori') { 
     require_once 'modul/kategori/kategori.php';
+  } else if($_GET['p'] == 'admin') {
+    require_once 'modul/admin/admin.php';
   } else {
     require_once '404.php';
   }
