@@ -161,12 +161,22 @@ $gbrZ = mysqli_fetch_assoc($gambarZoom);
 				</div>
           	    <div class="clearfix"> </div>
           	   </div>
-          	   <ul id="flexiselDemo1">
-			<li><img src="images/pi.jpg" /><div class="grid-flex"><a href="#">Bloch</a><p>Rs 850</p></div></li>
+      <ul id="flexiselDemo1">
+      <?php 
+      // ambil url dari content.php
+      $idk = $_GET['rl'];
+      // $relate = mysqli_query($conn, "SELECT * FROM tb_barang INNER JOIN tb_kategori ON tb_barang.kd_barang = tb_kategori.id_kategori") or die(mysqli_error($conn));
+      $relate = mysqli_query($conn, "SELECT * FROM tb_barang WHERE id_kategori = $idk") or die(mysqli_error($conn));
+      while($rRow = mysqli_fetch_assoc($relate)) { ?>
+      <!-- <?php if($rRow['id_kategori'] == $rRow['id_kategori']) : ?> -->
+			<li><img src="paneladmin/modul/produk/img/<?= $rRow['foto']; ?>"><div class="grid-flex"><a href="single.php?id=<?= $rRow['kd_barang']; ?>&rl=<?= $rRow['id_kategori']; ?>"><?= $rRow['nama']; ?></a><p>Rp <?= number_format($rRow['hrg_jual']); ?></p></div></li>
+			<!-- <?php endif; ?> -->
+			<?php } ?>
+			<!-- 
 			<li><img src="images/pi1.jpg" /><div class="grid-flex"><a href="#">Capzio</a><p>Rs 850</p></div></li>
 			<li><img src="images/pi2.jpg" /><div class="grid-flex"><a href="#">Zumba</a><p>Rs 850</p></div></li>
 			<li><img src="images/pi3.jpg" /><div class="grid-flex"><a href="#">Bloch</a><p>Rs 850</p></div></li>
-			<li><img src="images/pi4.jpg" /><div class="grid-flex"><a href="#">Capzio</a><p>Rs 850</p></div></li>
+			<li><img src="images/pi4.jpg" /><div class="grid-flex"><a href="#">Capzio</a><p>Rs 850</p></div></li> -->
 		 </ul>
 	    <script type="text/javascript">
 		 $(window).load(function() {

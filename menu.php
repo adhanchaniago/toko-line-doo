@@ -35,9 +35,8 @@
 		<?php 
 		$sidebarBrg = mysqli_query($conn, "SELECT * FROM tb_barang ORDER BY id_kategori LIMIT 1") or die(mysqli_error($conn));
 		while($row = mysqli_fetch_assoc($sidebarBrg)) { ?>
-						<br>
 					<div class="chain-grid menu-chain">
-	   		     		<a href="single.php?id=<?= $row['kd_barang']; ?>"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $row['foto']; ?>" alt=" " /></a>	   		     		
+	   		     		<a href="single.php?id=<?= $row['kd_barang']; ?>&rl=<?= $row['id_kategori']; ?>"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $row['foto']; ?>" alt=" " /></a>	   		     		
 	   		     		<div class="grid-chain-bottom chain-watch">
 		   		     		<span class="actual dolor-left-grid">Rp. <?= number_format($row['hrg_jual'],2,",","."); ?></span>
 		   		     		<span class="reducedfrom">500$</span>  

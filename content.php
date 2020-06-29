@@ -16,7 +16,7 @@ $sldS = mysqli_fetch_assoc($slideSingle);
 							<img class="img-responsive " src="paneladmin/modul/produk/img/<?= $rowS['foto']; ?>" alt=" " />
 							</div>
 							<div class="col-md-7 banner-off">							
-								<a href="single.php?id=<?= $rowS['kd_barang']; ?>"><h2><?= $rowS['nama']; ?></h2></a>
+								<a href="single.php?id=<?= $rowS['kd_barang']; ?>&rl=<?= $rowS['id_kategori']; ?>"><h2><?= $rowS['nama']; ?></h2></a>
 								<label>Cuma <b>Rp. <?= number_format($rowS['hrg_jual'],2,",","."); ?></b></label>
 								<!-- funsi untuk menampilkan deskripsi mau berapa kata -->
 								<?php 
@@ -95,7 +95,7 @@ $sldS = mysqli_fetch_assoc($slideSingle);
 							$brgterakhir = mysqli_query($conn, "SELECT * FROM tb_barang ORDER BY nama LIMIT 3") or die(mysqli_error($conn));
 							while($row = mysqli_fetch_assoc($brgterakhir)) { ?>
 	   		     	<div class="col-md-4 chain-grid">
-	   		     		<a href="single.php?id=<?= $row['kd_barang']; ?>"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $row['foto']; ?>" alt=" " /></a>
+	   		     		<a href="single.php?id=<?= $row['kd_barang']; ?>&rl=<?= $row['id_kategori']; ?>"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $row['foto']; ?>" alt=" " /></a>
 	   		     		<span class="star"> </span>
 	   		     		<div class="grid-chain-bottom">
 	   		     			<h6><a href="single.php?id=<?= $row['kd_barang']; ?>"><?= $row['nama']; ?></a></h6>
@@ -134,7 +134,7 @@ $sldS = mysqli_fetch_assoc($slideSingle);
 							$brglaris = mysqli_query($conn, "SELECT * FROM tb_barang ORDER BY terjual DESC LIMIT 3") or die(mysqli_error($conn));
 							while($rowt = mysqli_fetch_assoc($brglaris)) { ?>
 	   		     	<div class="col-md-4 chain-grid">
-	   		     		<a href="single.php?id=<?= $rowt['kd_barang']; ?>"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $rowt['foto']; ?>" alt=" " /></a>
+	   		     		<a href="single.php?id=<?= $rowt['kd_barang']; ?>&rl=<?= $rowt['id_kategori']; ?>"><img class="img-responsive chain" src="paneladmin/modul/produk/img/<?= $rowt['foto']; ?>" alt=" " /></a>
 	   		     		<span class="star"> </span>
 	   		     		<div class="grid-chain-bottom">
 	   		     			<h6><a href="single.php?id=<?= $rowt['kd_barang']; ?>"><?= $rowt['nama']; ?></a></h6>

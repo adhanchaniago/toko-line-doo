@@ -1,5 +1,10 @@
+<!--A Design by W3layouts 
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
 <?php 
-session_start();
 require_once 'config/koneksi.php';
 require_once 'config/functions.php';
 
@@ -7,11 +12,10 @@ require_once 'config/functions.php';
 <!DOCTYPE html>
 <html>
 <head>
-<title>TokoLineDoo | Website Jual Beli Online</title>
+<title>Keranjang | TokoLineDoo</title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
-<link href="paneladmin/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <!--//theme-style-->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
@@ -19,7 +23,8 @@ require_once 'config/functions.php';
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
 <!--//fonts-->
 <script src="js/jquery.min.js"></script>
-<!--script-->
+
+
 </head>
 <body> 
 	<!--header-->
@@ -87,7 +92,7 @@ require_once 'config/functions.php';
 							</ul>
 						<?php endif; ?>
 						<!-- <div class="cart"><a href="#"><span> </span>KERANJANG</a></div> -->
-						<div class="cart"><a href="<?= base_url('keranjang.php'); ?>"><span> </span></a></div>
+						<div class="cart"><a href="<?= base_url('paneladmin/index.php'); ?>"><span> </span></a></div>
 					<div class="clearfix"> </div>
 				</div>
 				<div class="clearfix"> </div>	
@@ -95,24 +100,46 @@ require_once 'config/functions.php';
 		</div>
 	</div>
 	<!---->
-	<div class="container">
-		<div class="shoes-grid">
-			<?php include 'content.php'; ?> 
-			</div>  
-			   <div class="sub-cate">
-				<?php include 'menu.php'; ?>       	         
+	<div class="container"> 
+		
+		<div class="register">
+		<table class="table">
+			<tr>
+				<th>No</th>
+				<th>Barang</th>
+				<th>Harga</th>
+				<th>Kualitas</th>
+				<th>Beli</th>
+			</tr>
+			<?php 
+			$showKeranjang = mysqli_query($conn, "SELECT * FROM tb_keranjang ORDER BY id_krj DESC") or die(mysqli_error($conn));
+			$no = 1;
+			while($rowkrj = mysqli_fetch_assoc($showKeranjang)) { ?>
+			<tr>
+				<td><?= $no++; ?></td>
+				<td><?= $rowkrj['name']; ?></td>
+				<td><?= $rowkrj['price']; ?></td>
+				<td><?= $rowkrj['quantity']; ?></td>
+				<td>
+					<a href="cart.php?id=<?= $rowkrj['id_krj']; ?>&action=add" class="btn btn-info">Order Sekarang</a>
+				</td>
+			</tr>
+			<?php } ?>
+		</table>	         
 		</div>
-	
+		   <div class="sub-cate">
+				<?php include 'menu.php'; ?>     
+	</div>
 	<!---->
 	<div class="footer">
 		<div class="footer-top">
 			<div class="container">
 				<div class="latter">
-					<h6>SURAT-BERITA</h6>
+					<h6>NEWS-LETTER</h6>
 					<div class="sub-left-right">
 						<form>
-							<input type="text" value="Enter email here"onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Masukan email anda';}" />
-							<input type="submit" value="BERLANGGANAN" />
+							<input type="text" value="Enter email here"onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter email here';}" />
+							<input type="submit" value="SUBSCRIBE" />
 						</form>
 					</div>
 					<div class="clearfix"> </div>
@@ -137,7 +164,7 @@ require_once 'config/functions.php';
 						<?php 
 						$menu = mysqli_query($conn, "SELECT * FROM tb_kategori") or die(mysqli_error($conn));
 						while($row = mysqli_fetch_assoc($menu)) { ?>
-						<li><a href="product.php?id=<?= $row['id_kategori']; ?>"><?= $row['nama_kategori']; ?></a></li>
+						<li><a href="#"><?= $row['nama_kategori']; ?></a></li>
 						<?php } ?>
 					</ul>
 				</div>

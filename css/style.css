@@ -445,8 +445,8 @@ h5.latest-product{
 .chain-grid{
 	border: 1px solid #ddd;
 	position: relative;	
-	width: 30.7%;
-	margin: 0 3% 0 0;
+	width: 30%;
+	margin: 0 1% 0 1%;
 	padding:0;
 }
 .menu-chain{
@@ -702,8 +702,8 @@ p.m_text {
 .left-grid-view .mask,.left-grid-view .content {
    position: absolute;
 	overflow: hidden;
-	top: 209px;
-	left: 163px;
+	top: 195px;
+	left: 190px;
 }
 .grid-view-left img {
    -webkit-transition: all 0.3s ease-in-out;
