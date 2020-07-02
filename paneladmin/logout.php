@@ -13,7 +13,7 @@ $query = mysqli_query($conn, "SELECT * FROM tb_user") or die(mysqli_error($conn)
 $row = mysqli_fetch_assoc($query);
 
 $_SESSION['username'] = $row['username'];
-echo "<script>alert('$_SESSION[username] Berhasil Logout');window.location='index.php';</script>";
+echo "<script>alert('$_SESSION[username] Berhasil Logout');window.location='index.php';</script>"; 
 // header("Location: index.php");
 // exit;
 

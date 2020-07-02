@@ -1,12 +1,18 @@
-<!--A Design by W3layouts 
-Author: W3layout
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <?php 
+session_start();
 require_once 'config/koneksi.php';
 require_once 'config/functions.php';
+
+$keranjang = @$_SESSION['keranjang'];
+
+if(!isset($_SESSION['username'])) {
+	header("Location: " . "paneladmin/index.php");
+	exit;
+}
+
+if(empty($keranjang)) {
+	echo "<script>alert('Keranjang belanja kosong, silahkan beli beberapa produk.');window.location='index.php';</script>";
+}
 
 ?>
 <!DOCTYPE html>
@@ -16,6 +22,7 @@ require_once 'config/functions.php';
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
+<link href="paneladmin/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <!--//theme-style-->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
@@ -69,7 +76,7 @@ require_once 'config/functions.php';
 			<div class="container">
 				<div class="header-bottom-left">
 					<div class="logo">
-						<a href="index.html"><img src="images/logo.png" alt=" " /></a>
+						<a href="index.php"><img src="images/logo.png" alt=" " /></a>
 					</div>
 					<div class="search">
 						<input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}" >
@@ -108,23 +115,29 @@ require_once 'config/functions.php';
 				<th>No</th>
 				<th>Barang</th>
 				<th>Harga</th>
-				<th>Kualitas</th>
-				<th>Beli</th>
+				<th>Jumlah</th>
+				<th>Subtotal</th>
+				<th>Hapus Barang</th>
 			</tr>
 			<?php 
-			$showKeranjang = mysqli_query($conn, "SELECT * FROM tb_keranjang ORDER BY id_krj DESC") or die(mysqli_error($conn));
 			$no = 1;
-			while($rowkrj = mysqli_fetch_assoc($showKeranjang)) { ?>
+			foreach($keranjang as $id_produk => $jumlah) : ?>
+			<?php 
+			$query_keranjang = mysqli_query($conn, "SELECT * FROM tb_barang WHERE kd_barang = $id_produk") or die(mysqli_error($conn));
+			$rowK = mysqli_fetch_assoc($query_keranjang);
+			$subtotal = $rowK['hrg_jual'] * $jumlah;
+			?>
 			<tr>
 				<td><?= $no++; ?></td>
-				<td><?= $rowkrj['name']; ?></td>
-				<td><?= $rowkrj['price']; ?></td>
-				<td><?= $rowkrj['quantity']; ?></td>
+				<td><?= $rowK['nama']; ?></td>
+				<td><?= number_format($rowK['hrg_jual']); ?></td>
+				<td><?= $jumlah; ?></td>
+				<td><?= number_format($subtotal); ?></td>
 				<td>
-					<a href="cart.php?id=<?= $rowkrj['id_krj']; ?>&action=add" class="btn btn-info">Order Sekarang</a>
+					<a href="hapus_keranjang.php?id=<?= $id_produk; ?>"><i class="fa fa-trash-o" onclick="return confirm('Yakin ?')"></i> Dari Keranjang</a>
 				</td>
 			</tr>
-			<?php } ?>
+			<?php endforeach; ?>
 		</table>	         
 		</div>
 		   <div class="sub-cate">

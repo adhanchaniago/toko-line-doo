@@ -25,7 +25,7 @@ $sldS = mysqli_fetch_assoc($slideSingle);
 									$tampil = substr($kalimat, 0, $jmlKata);
 								?>
 								<p><?= $tampil . "<b> Lanjut Baca...</b>";  ?></p>					
-								<span class="on-get">BELI SEKARANG</span>
+								<a href="beli.php?id=<?= $rowS['kd_barang']; ?>"><span class="on-get">BELI SEKARANG</span></a>
 							</div>
 							
 							<div class="clearfix"> </div>
@@ -116,7 +116,7 @@ $sldS = mysqli_fetch_assoc($slideSingle);
 									        <label for="rating-input-1-1" class="rating-star"> </label>
 							    	   </span>
 	   		     				</div>
-	   		     				<a class="now-get get-cart" href="#"><i class="fa fa-shopping-cart"></i> Tambah Di Keranjang</a> 
+	   		     				<a class="now-get get-cart" href="beli.php?id=<?= $row['kd_barang']; ?>"><i class="fa fa-shopping-cart"></i> Tambah Di Keranjang</a> 
 	   		     				<div class="clearfix"> </div>
 							</div>
 	   		     		</div>
@@ -155,7 +155,7 @@ $sldS = mysqli_fetch_assoc($slideSingle);
 									        <label for="rating-input-1-1" class="rating-star"> </label>
 							    	   </span>
 	   		     				</div>
-	   		     				<a class="now-get get-cart" href="#"><i class="fa fa-shopping-cart"></i> Tambah Di Keranjang</a> 
+	   		     				<a class="now-get get-cart" href="beli.php?id=<?= $rowt['kd_barang']; ?>"><i class="fa fa-shopping-cart"></i> Tambah Di Keranjang</a> 
 	   		     				<div class="clearfix"> </div>
 							</div>
 	   		     		</div>

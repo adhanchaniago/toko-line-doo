@@ -142,7 +142,7 @@ $gbrZ = mysqli_fetch_assoc($gambarZoom);
 					<h4><?= $gbrZ['nama']; ?></h4>
 				<div class="cart-b">
 					<div class="left-n ">Rp. <?= $gbrZ['hrg_jual']; ?></div>
-				    <a class="now-get get-cart-in" href="#">Masukan Di Keranjang</a> 
+				    <a class="now-get get-cart-in" href="beli.php?id=<?= $gbrZ['kd_barang']; ?>">Masukan Di Keranjang</a> 
 				    <div class="clearfix"></div>
 				 </div>
 				 <h6><?= $gbrZ['jumlah']; ?> Stok</h6>
