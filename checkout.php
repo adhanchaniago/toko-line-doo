@@ -14,11 +14,18 @@ if(empty($keranjang)) {
 	echo "<script>alert('Keranjang belanja kosong, silahkan beli beberapa produk.');window.location='index.php';</script>";
 }
 
+$queryi = mysqli_query($conn, "SELECT * FROM tb_user") or die(mysqli_error($conn));
+$rowS = mysqli_fetch_assoc($queryi);
+$_SESSION['id_user'] = $rowS['id_user'];
+$_SESSION['no_telp'] = $rowS['no_telp'];
+$_SESSION['emaill'] = $rowS['email'];
+// var_dump($_SESSION['id_user']);
+
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Keranjang | TokoLineDoo</title>
+<title>Checkout | TokoLineDoo</title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
@@ -111,20 +118,23 @@ if(empty($keranjang)) {
 		
 		<div class="register">
 			<div class="products">
-	   		<h5 class="latest-product"><i class="fa fa-shopping-cart"></i> KERANJANG BELANJA</h5>	
+	   		<h5 class="latest-product"><i class="fa fa-shopping-cart"></i> CHECKOUT BELANJA</h5>	
 	     	  <!-- <a class="view-all" href="product.html">VIEW ALL<span> </span></a> 		      -->
 	    </div>
 		<table class="table">
+			<thead>
 			<tr>
 				<th>No</th>
 				<th>Barang</th>
 				<th>Harga</th>
 				<th>Jumlah</th>
 				<th>Subtotal</th>
-				<th>Hapus Barang</th>
 			</tr>
+			</thead>
+			<tbody>
 			<?php 
 			$no = 1;
+			$totalbelanja = 0;
 			foreach($keranjang as $id_produk => $jumlah) : ?>
 			<?php 
 			$query_keranjang = mysqli_query($conn, "SELECT * FROM tb_barang WHERE kd_barang = $id_produk") or die(mysqli_error($conn));
@@ -137,16 +147,113 @@ if(empty($keranjang)) {
 				<td><?= number_format($rowK['hrg_jual']); ?></td>
 				<td><?= $jumlah; ?></td>
 				<td><?= number_format($subtotal); ?></td>
-				<td>
-					<a href="hapus_keranjang.php?id=<?= $id_produk; ?>"><i class="fa fa-trash-o" onclick="return confirm('Yakin ?')"></i> Dari Keranjang</a>
-				</td>
 			</tr>
+			<?php $totalbelanja += $subtotal; ?>
 			<?php endforeach; ?>
 			<div class="col-md-12" style="margin-bottom: 8px;">
-				<a href="checkout.php" class="btn btn-primary" style="float: right;">Checkout</a>
-				<a href="index.php" class="btn btn-info" style="float: right;margin-right: 3px;">Belanja Lagi</a>
+				
 			</div>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="4">Total Belanja</td>
+					<td>Rp. <?= number_format($totalbelanja); ?></td>
+				</tr>
+			</tfoot>
 		</table>
+		<div class="row">
+			<div class="col-md-3">
+				<form action="" method="post">
+				<input type="text" readonly="" value="<?= $_SESSION['nama_lengkap']; ?>">
+			</div>
+			<div class="col-md-3">
+				<input type="text" readonly="" value="<?= $_SESSION['emaill']; ?>">
+			</div>
+			<div class="col-md-3">
+				<input type="text" readonly="" value="<?= $_SESSION['no_telp']; ?>">
+			</div>
+			<div class="col-md-3">
+				<select name="id_ongkir" class="form-control">
+					<option value="">Pilih Ongkir</option>
+					<?php 
+					$ongkir = mysqli_query($conn, "SELECT * FROM tb_ongkir");
+					while($rowO = mysqli_fetch_assoc($ongkir)) {
+					?>
+					<option value="<?= $rowO['id_ongkir'] ?>"><?= $rowO['nama_kota'] . " ~ Rp. " . number_format($rowO['tarif']); ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="col-md-12">
+			<div class="form-group">
+				<label>Alamat Pengiriman</label>
+				<textarea name="alamat_pengiriman" class="form-control" cols="10" rows="3" placeholder="Masukan alamat lengkap anda..."></textarea>
+			</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12" style="margin-top: 10px;">
+					<button type="submit" name="checkout" class="btn btn-danger" style="float: right;">Checkout</button>
+				</div>
+			</div>
+		</div>
+		</form>
+
+		<!-- Aksi Checkout -->
+		<?php 
+		if(isset($_POST['checkout'])) {
+			// mendapatkan id_user
+			$id_user = $_SESSION['id_user'];
+			// dapatkan id_ongkir
+			$id_ongkir = $_POST['id_ongkir'];
+			$tgl_pembelian = date('Y-m-d');
+			$alamat_pengiriman = $_POST['alamat_pengiriman'];
+
+			// jika inputan ongkir kosong
+			if(empty($id_ongkir)) {
+				echo "<script>alert('Pilih tujuan pengiriman')</script>";
+				return false;
+			}
+
+			// jika inputan alamat kosong
+			if(empty($alamat_pengiriman)) {
+				echo "<script>alert('Isi alamat lengkap anda terlebih dahulu.')</script>";
+				return false;
+			}
+
+			$queryOngkir = $conn->query("SELECT * FROM tb_ongkir WHERE id_ongkir = $id_ongkir") or die(mysqli_error($conn));
+			$pecahOngkir = $queryOngkir->fetch_assoc();
+			$nama_kota = $pecahOngkir['nama_kota'];
+			$tarifOngkir = $pecahOngkir['tarif'];
+
+			$total_pembelian = $totalbelanja + $tarifOngkir; 
+
+			// menyimpan data ke table pembelian
+			$queryPembelian = $conn->query("INSERT INTO tb_pembelian (id_user, id_ongkir, tgl_pembelian, total_pembelian, nama_kota, tarif, alamat_pengiriman) VALUES ('$id_user', '$id_ongkir', '$tgl_pembelian', '$total_pembelian', '$nama_kota', '$tarifOngkir', '$alamat_pengiriman')") or die(mysqli_error($conn));
+
+			// mendapatkan id_pembelian barusan
+			$id_pembelian_barusan = $conn->insert_id;
+
+			foreach($_SESSION['keranjang'] as $id_produk => $jumlah) {
+				// menampilkan barang berdasarkan kd_barang
+				$ambil = $conn->query("SELECT * FROM tb_barang WHERE kd_barang = $id_produk") or die(mysqli_error($conn));
+				$perbarang = $ambil->fetch_assoc();
+
+				$nama = $perbarang['nama'];
+				$harga = $perbarang['hrg_jual'];
+				$subharga = $perbarang['hrg_jual'] * $jumlah;
+
+				$conn->query("INSERT INTO tb_pembelian_barang (id_pembelian, kd_barang, jumlah, nama, harga, subharga) VALUES('$id_pembelian_barusan', '$id_produk', '$jumlah', '$nama', '$harga', '$subharga')") or die(mysqli_error($conn));
+			}
+
+			// mengkosongkan keranjang belanja, stelah memasukan ke DB
+			unset($_SESSION['keranjang']);
+
+			// menampilkan pesan & mengalihkan ke halaman nota.php
+			echo "<script>alert('Pembelian Berhasil');window.location='nota.php?id=$id_pembelian_barusan';</script>";
+
+		}
+
+		?>
+
 		</div>
 		   <div class="sub-cate">
 				<?php include 'menu.php'; ?>     
@@ -234,3 +341,5 @@ if(empty($keranjang)) {
 	</div>
 </body>
 </html>
+
+
