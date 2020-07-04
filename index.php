@@ -87,7 +87,7 @@ require_once 'config/functions.php';
 							</ul>
 						<?php endif; ?>
 						<!-- <div class="cart"><a href="#"><span> </span>KERANJANG</a></div> -->
-						<div class="cart"><a href="<?= base_url('keranjang.php'); ?>"><span> </span></a></div>
+						<div class="cart"><a href="<?= base_url('keranjang/keranjang.php'); ?>"><span> </span></a></div>
 					<div class="clearfix"> </div>
 				</div>
 				<div class="clearfix"> </div>	

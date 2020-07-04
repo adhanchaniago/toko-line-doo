@@ -6,6 +6,15 @@ require_once 'config/functions.php';
 $id = $_GET['id'];
 $gambarZoom = mysqli_query($conn, "SELECT * FROM tb_barang WHERE kd_barang = $id") or die(mysqli_error($conn));
 $gbrZ = mysqli_fetch_assoc($gambarZoom);
+
+// ketika tombol beli di klik
+if(isset($_POST['beli'])) {
+	$jumlah = $_POST['jumlah'];
+
+	$_SESSION['keranjang'][$id] = $jumlah;
+
+	echo "<script>alert('Produk berhasil masuk ke keranjang belanja anda.');window.location='keranjang.php';</script>";
+}
  
 
 ?>
@@ -145,7 +154,16 @@ $gbrZ = mysqli_fetch_assoc($gambarZoom);
 				    <a class="now-get get-cart-in" href="beli.php?id=<?= $gbrZ['kd_barang']; ?>">Masukan Di Keranjang</a> 
 				    <div class="clearfix"></div>
 				 </div>
+
+				 </form>
 				 <h6><?= $gbrZ['jumlah']; ?> Stok</h6>
+				 <form action="" method="post">
+				 	<div class="input-group col-md-4">
+			      <input type="number" name="jumlah" class="form-control">
+			      <span class="input-group-btn">
+			        <button type="submit" name="beli" class="btn btn-primary" type="button">Beli</button>
+			      </span>
+			    </div><!-- /input-group -->
 			   	<p><?= $gbrZ['deskripsi']; ?>.</p>
 			   	<div class="share">
 							<h5>Share Product :</h5>
