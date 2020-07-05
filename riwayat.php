@@ -3,8 +3,9 @@ session_start();
 require_once 'config/koneksi.php';
 require_once 'config/functions.php';
 
+// jika pengguna belum login, tetapi ingin mengakses riwayat.php
 if(!isset($_SESSION['username'])) {
-	header("Location: " . "paneladmin/index.php");
+	header("Location: paneladmin/index.php");
 	exit;
 }
 
@@ -12,11 +13,12 @@ $queryAmbilUser = mysqli_query($conn, "SELECT * FROM tb_user") or die(mysqli_err
 $rowUser = mysqli_fetch_assoc($queryAmbilUser);
 $_SESSION['id_user'] = $rowUser['id_user'];
 
+
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Detail Pembelian | TokoLineDoo</title>
+<title>Riwayat Belanja | TokoLineDoo</title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
@@ -74,7 +76,7 @@ $_SESSION['id_user'] = $rowUser['id_user'];
 			<div class="container">
 				<div class="header-bottom-left">
 					<div class="logo">
-						<a href="index.html"><img src="images/logo.png" alt=" " /></a>
+						<a href="index.php"><img src="images/logo.png" alt=" " /></a>
 					</div>
 					<div class="search">
 						<input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}" >
@@ -105,98 +107,44 @@ $_SESSION['id_user'] = $rowUser['id_user'];
 		</div>
 	</div>
 	<!---->
-	<div class="container">      
+	<div class="container"> 
+		
 		<div class="register">
-		  	<div class="products">
-	   			<h5 class="latest-product"><i class="fa fa-pencil-square"></i> DETAIL PEMBELIAN</h5>	
+			<div class="products">
+	   		<h5 class="latest-product"><i class="fa fa-shopping-cart"></i> RIWAYAT BELANJA <?= $_SESSION['nama_lengkap']; ?></h5>	
 	     	  <!-- <a class="view-all" href="product.html">VIEW ALL<span> </span></a> 		      -->
-	    	</div>
-	    	<div class="row">
-	    		<div class="col-md-12">
-	    			<?php 
-	    			$id = $_GET['id'];
-	    			$query = mysqli_query($conn, "SELECT * FROM tb_pembelian JOIN tb_user ON tb_pembelian.id_user = tb_user.id_user JOIN tb_ongkir ON tb_ongkir.id_ongkir WHERE tb_pembelian.id_pembelian = $id") or die(mysqli_error($conn));
-	    			$detail = mysqli_fetch_assoc($query);
+	    </div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>Tanggal</th>
+					<th>Status</th>
+					<th>Total</th>
+					<th>Opsi</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php 
+				$no = 1;
+				$id_user = $_SESSION['id_user'];
+				$queryRiwayat = mysqli_query($conn, "SELECT * FROM tb_pembelian WHERE id_user = $id_user") or die(mysqli_error($conn));
+				while($rowRi = mysqli_fetch_assoc($queryRiwayat)) {
 
-	    			// ketika user jail yang ingin mengakses melalui url dengan id sembarangan.
-	    			$id_userYgLogin = $_SESSION['id_user'];
-	    			$id_userYgBeli = $detail['id_user'];
-
-	    			if($id_userYgBeli != $id_userYgLogin) {
-	    				header("Location: riwayat.php");
-	    				exit;
-	    			}
-	    			?>
-	    			<!-- <pre><?php var_dump($detail); ?></pre> -->
-	    			<!-- <pre><?php var_dump($_SESSION['id_user']); ?></pre> -->
-	    			<div class="products">
-	    			<div class="col-md-4">
-	    					<h4>Pembelian</h4>
-	    					<div class="panel panel-default">
-								  <div class="panel-body">
-								    <b>No. Pembelian : <?= $detail['id_pembelian']; ?></b><br>
-								    Tanggal : <?= $detail['tgl_pembelian']; ?> <br>
-								    Total : <?= number_format($detail['total_pembelian']); ?> <br>
-								  </div>
-								</div>
-	    			</div>
-	    			<div class="col-md-4">
-	    					<h4>Pelanggan</h4>
-	    					<div class="panel panel-default">
-								  <div class="panel-body">
-								    <b>Nama : <?= $detail['nama_lengkap']; ?></b><br>
-								    Email : <?= $detail['email']; ?> <br>
-								    Telepon: <?= $detail['no_telp']; ?>
-								  </div>
-								</div>
-	    			</div>
-	    			<div class="col-md-4">
-	    					<h4>Pengirim</h4>
-	    					<div class="panel panel-default">
-								  <div class="panel-body">
-								    <b>Kota : <?= $detail['nama_kota']; ?></b><br>
-								    Tarif : <?= number_format($detail['tarif']); ?> <br>
-								    Alamat : <?= $detail['alamat_pengiriman']; ?>
-								  </div>
-								</div>
-	    			</div>
-	    				<div class="col-md-12">
-	    					<div class="alert alert-info" role="alert">
-						  	<i class="fa fa-info-circle"></i> Silahkan melakukan pembayaran <b>Rp. <?= number_format($detail['total_pembelian']); ?> BANK BRI 182-098787-2341 AN. Ridho Surya
-          </b>
-								</div>
-							</div>
-	    				<div class="col-md-12">
-	    					<table class="table">
-	    						<thead>
-	    							<tr>
-	    								<td>No</td>
-	    								<td>Nama Barang</td>
-	    								<td>Harga</td>
-	    								<td>Jumlah</td>
-	    								<td>Subtotal</td>
-	    							</tr>
-	    						</thead>
-	    						<tbody>
-	    							<?php 
-	    							$no = 1;
-	    							$query_pembelian_barang = mysqli_query($conn, "SELECT * FROM  tb_pembelian_barang WHERE id_pembelian = $id") or die(mysqli_error($conn));
-	    							while($rowPB = mysqli_fetch_assoc($query_pembelian_barang)) {
-	    							?>
-	    							<tr>
-	    								<td><?= $no++; ?></td>
-	    								<td><?= $rowPB['nama']; ?></td>
-	    								<td>Rp. <?= number_format($rowPB['harga']); ?></td>
-	    								<td><?= $rowPB['jumlah']; ?></td>
-	    								<td>Rp. <?= number_format($rowPB['subharga']); ?></td>
-	    							</tr>
-	    							<?php } ?>
-	    						</tbody>
-	    					</table>
-	    				</div>
-	    				</div>
-	    			</div>
-	    	</div>
+				?>
+				<tr>
+					<td><?= $no++; ?></td>
+					<td><?= $rowRi['tgl_pembelian']; ?></td>
+					<td><?= $rowRi['status_pembelian']; ?></td>
+					<td><?= $rowRi['total_pembelian']; ?></td>
+					<td>
+						<a href="nota.php?id=<?= $rowRi['id_pembelian']; ?>" class="btn btn-success">Nota</a>
+						<a href="pembayaran.php?id=<?= $rowRi['id_pembelian']; ?>" class="btn btn-info">Pembayaran</a>
+					</td>
+				</tr>
+				<?php } ?>
+			</tbody>
+		</table>
 		</div>
 		   <div class="sub-cate">
 				<?php include 'menu.php'; ?>     

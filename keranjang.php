@@ -5,10 +5,10 @@ require_once 'config/functions.php';
 
 $keranjang = @$_SESSION['keranjang'];
 
-if(!isset($_SESSION['username'])) {
-	header("Location: " . "paneladmin/index.php");
-	exit;
-}
+// if(!isset($_SESSION['username'])) {
+// 	header("Location: " . "paneladmin/index.php");
+// 	exit;
+// }
 
 if(empty($keranjang)) {
 	echo "<script>alert('Keranjang belanja kosong, silahkan beli beberapa produk.');window.location='index.php';</script>";
@@ -145,6 +145,7 @@ if(empty($keranjang)) {
 			<div class="col-md-12" style="margin-bottom: 8px;">
 				<a href="checkout.php" class="btn btn-primary" style="float: right;">Checkout</a>
 				<a href="index.php" class="btn btn-info" style="float: right;margin-right: 3px;">Belanja Lagi</a>
+				<a href="riwayat.php" class="btn btn-success" style="float: right;margin-right: 3px;">Riwayat Belanja</a>
 			</div>
 		</table>
 		</div>

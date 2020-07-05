@@ -3,20 +3,71 @@ session_start();
 require_once 'config/koneksi.php';
 require_once 'config/functions.php';
 
-if(!isset($_SESSION['username'])) {
-	header("Location: " . "paneladmin/index.php");
+$keranjang = @$_SESSION['keranjang'];
+
+// if(!isset($_SESSION['username'])) {
+// 	header("Location: " . "paneladmin/index.php");
+// 	exit;
+// }
+
+$id_pem = $_GET['id'];
+
+// mendapatkan id_pembelian melalui url
+$ambil = mysqli_query($conn, "SELECT * FROM tb_pembelian WHERE id_pembelian = '$id_pem'") or die(mysqli_error($conn));
+$pecah = mysqli_fetch_assoc($ambil);
+
+// mendapatkan id_user yang sedang login
+$id_user_login = $_SESSION['id_user'];
+// var_dump($id_user_login);
+
+// mendapatkan id_pembelian
+$id_user_beli = $pecah['id_user'];
+
+if($id_user_beli != $id_user_login) {
+	header("Location: riwayat.php");
 	exit;
 }
 
-$queryAmbilUser = mysqli_query($conn, "SELECT * FROM tb_user") or die(mysqli_error($conn));
-$rowUser = mysqli_fetch_assoc($queryAmbilUser);
-$_SESSION['id_user'] = $rowUser['id_user'];
+// jika tombol kirim ditekan
+if(isset($_POST['kirim'])) {
+	$nama = htmlspecialchars($_POST['nama']);
+	$bank = htmlspecialchars($_POST['bank']);
+	$jumlah = htmlspecialchars($_POST['jumlah']);
+	$tanggal = date('Y-m-d');
+
+	$fotoBukti = $_FILES['bukti']['name'];
+	$tmpBukti = $_FILES['bukti']['tmp_name'];
+
+	$ektensiGambarValid = ['jpg', 'jpeg', 'png'];
+	$ektensiGambar = explode('.', $fotoBukti);
+	$ektensiGambar = strtolower(end($ektensiGambar));
+
+	// cek apakah sesuai dengan ektensi ?
+	if(!in_array($ektensiGambar, $ektensiGambarValid)) {
+		echo "<script>alert('Pastikan gambar yang anda upload JPG,JPEG,PNG.')</script>";
+		return false;
+	}
+
+	$namaFileBaru = uniqid();
+	$namaFileBaru .= '.';
+	$namaFileBaru .= $ektensiGambar;
+	move_uploaded_file($tmpBukti, 'images/bukti/' . $namaFileBaru);
+
+	mysqli_query($conn, "INSERT INTO tb_pembayaran (id_pembelian, nama, bank, jumlah, tanggal, bukti) VALUES ('$id_pem', '$nama', '$bank', '$jumlah', '$tanggal', '$namaFileBaru') ") or die(mysqli_error($conn));
+
+	// update tb_pembelian di bagian status
+	mysqli_query($conn, "UPDATE tb_pembelian SET status_pembelian = 'Bukti Terkirim' WHERE id_pembelian = '$id_pem'") or die(mysqli_error($conn));
+
+	echo "<script>alert('Bukti berhasil di kirim, silahkan konfirmasi melalui pesan di halaman dashboard anda.');window.location='riwayat.php';</script>";
+
+	return $namaFileBaru;
+}
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Detail Pembelian | TokoLineDoo</title>
+<title>Pembayaran | TokoLineDoo</title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
@@ -74,7 +125,7 @@ $_SESSION['id_user'] = $rowUser['id_user'];
 			<div class="container">
 				<div class="header-bottom-left">
 					<div class="logo">
-						<a href="index.html"><img src="images/logo.png" alt=" " /></a>
+						<a href="index.php"><img src="images/logo.png" alt=" " /></a>
 					</div>
 					<div class="search">
 						<input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}" >
@@ -105,98 +156,43 @@ $_SESSION['id_user'] = $rowUser['id_user'];
 		</div>
 	</div>
 	<!---->
-	<div class="container">      
+	<div class="container"> 
+		
 		<div class="register">
-		  	<div class="products">
-	   			<h5 class="latest-product"><i class="fa fa-pencil-square"></i> DETAIL PEMBELIAN</h5>	
+			<div class="products">
+	   		<h5 class="latest-product"><i class="fa fa-shopping-cart"></i> PEMBAYARAN BELANJA <?= $_SESSION['nama_lengkap']; ?></h5>	
 	     	  <!-- <a class="view-all" href="product.html">VIEW ALL<span> </span></a> 		      -->
-	    	</div>
-	    	<div class="row">
-	    		<div class="col-md-12">
-	    			<?php 
-	    			$id = $_GET['id'];
-	    			$query = mysqli_query($conn, "SELECT * FROM tb_pembelian JOIN tb_user ON tb_pembelian.id_user = tb_user.id_user JOIN tb_ongkir ON tb_ongkir.id_ongkir WHERE tb_pembelian.id_pembelian = $id") or die(mysqli_error($conn));
-	    			$detail = mysqli_fetch_assoc($query);
-
-	    			// ketika user jail yang ingin mengakses melalui url dengan id sembarangan.
-	    			$id_userYgLogin = $_SESSION['id_user'];
-	    			$id_userYgBeli = $detail['id_user'];
-
-	    			if($id_userYgBeli != $id_userYgLogin) {
-	    				header("Location: riwayat.php");
-	    				exit;
-	    			}
-	    			?>
-	    			<!-- <pre><?php var_dump($detail); ?></pre> -->
-	    			<!-- <pre><?php var_dump($_SESSION['id_user']); ?></pre> -->
-	    			<div class="products">
-	    			<div class="col-md-4">
-	    					<h4>Pembelian</h4>
-	    					<div class="panel panel-default">
-								  <div class="panel-body">
-								    <b>No. Pembelian : <?= $detail['id_pembelian']; ?></b><br>
-								    Tanggal : <?= $detail['tgl_pembelian']; ?> <br>
-								    Total : <?= number_format($detail['total_pembelian']); ?> <br>
-								  </div>
+	    </div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="products">
+						<pre><?php var_dump($pecah); ?></pre>
+						<div class="register-top-grid">
+							<form action="" method="post" enctype="multipart/form-data">
+								<div class="form-group">
+									<label for="nama">Nama</label>
+									<input type="text" name="nama" id="nama" placeholder="Masukan nama pengirim" class="form-control">
 								</div>
-	    			</div>
-	    			<div class="col-md-4">
-	    					<h4>Pelanggan</h4>
-	    					<div class="panel panel-default">
-								  <div class="panel-body">
-								    <b>Nama : <?= $detail['nama_lengkap']; ?></b><br>
-								    Email : <?= $detail['email']; ?> <br>
-								    Telepon: <?= $detail['no_telp']; ?>
-								  </div>
+								<div class="form-group">
+									<label for="bank">Bank</label>
+									<input type="text" name="bank" id="bank" placeholder="Masukan bank pengirim" class="form-control">
 								</div>
-	    			</div>
-	    			<div class="col-md-4">
-	    					<h4>Pengirim</h4>
-	    					<div class="panel panel-default">
-								  <div class="panel-body">
-								    <b>Kota : <?= $detail['nama_kota']; ?></b><br>
-								    Tarif : <?= number_format($detail['tarif']); ?> <br>
-								    Alamat : <?= $detail['alamat_pengiriman']; ?>
-								  </div>
+								<div class="form-group">
+									<label for="jumlah">jumlah</label>
+									<input type="text" name="jumlah" id="jumlah" placeholder="Masukan jumlah transfer" class="form-control">
 								</div>
-	    			</div>
-	    				<div class="col-md-12">
-	    					<div class="alert alert-info" role="alert">
-						  	<i class="fa fa-info-circle"></i> Silahkan melakukan pembayaran <b>Rp. <?= number_format($detail['total_pembelian']); ?> BANK BRI 182-098787-2341 AN. Ridho Surya
-          </b>
+								<div class="form-group">
+									<label for="bukti">Bukti Pembayaran</label>
+									<input type="file" name="bukti" id="bukti" class="form-control-file">
 								</div>
-							</div>
-	    				<div class="col-md-12">
-	    					<table class="table">
-	    						<thead>
-	    							<tr>
-	    								<td>No</td>
-	    								<td>Nama Barang</td>
-	    								<td>Harga</td>
-	    								<td>Jumlah</td>
-	    								<td>Subtotal</td>
-	    							</tr>
-	    						</thead>
-	    						<tbody>
-	    							<?php 
-	    							$no = 1;
-	    							$query_pembelian_barang = mysqli_query($conn, "SELECT * FROM  tb_pembelian_barang WHERE id_pembelian = $id") or die(mysqli_error($conn));
-	    							while($rowPB = mysqli_fetch_assoc($query_pembelian_barang)) {
-	    							?>
-	    							<tr>
-	    								<td><?= $no++; ?></td>
-	    								<td><?= $rowPB['nama']; ?></td>
-	    								<td>Rp. <?= number_format($rowPB['harga']); ?></td>
-	    								<td><?= $rowPB['jumlah']; ?></td>
-	    								<td>Rp. <?= number_format($rowPB['subharga']); ?></td>
-	    							</tr>
-	    							<?php } ?>
-	    						</tbody>
-	    					</table>
-	    				</div>
-	    				</div>
-	    			</div>
-	    	</div>
+								<div class="form-group">
+									<button type="submit" name="kirim" class="btn btn-primary">Kirim</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		   <div class="sub-cate">
 				<?php include 'menu.php'; ?>     

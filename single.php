@@ -120,7 +120,7 @@ if(isset($_POST['beli'])) {
 							</ul>
 						<?php endif; ?>
 						<!-- <div class="cart"><a href="#"><span> </span>KERANJANG</a></div> -->
-						<div class="cart"><a href="<?= base_url('paneladmin/index.php'); ?>"><span> </span></a></div>
+						<div class="cart"><a href="<?= base_url('keranjang.php'); ?>"><span> </span></a></div>
 					<div class="clearfix"> </div>
 				</div>
 				<div class="clearfix"> </div>	
@@ -156,10 +156,10 @@ if(isset($_POST['beli'])) {
 				 </div>
 
 				 </form>
-				 <h6><?= $gbrZ['jumlah']; ?> Stok</h6>
+				 <h6>Stok <?= number_format($gbrZ['jumlah']); ?></h6>
 				 <form action="" method="post">
 				 	<div class="input-group col-md-4">
-			      <input type="number" name="jumlah" class="form-control">
+			      <input type="number" name="jumlah" min="1" max="<?= $gbrZ['jumlah']; ?>" class="form-control">
 			      <span class="input-group-btn">
 			        <button type="submit" name="beli" class="btn btn-primary" type="button">Beli</button>
 			      </span>

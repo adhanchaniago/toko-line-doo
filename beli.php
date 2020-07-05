@@ -11,12 +11,12 @@ if(isset($_SESSION['keranjang'][$id_barang])) {
 }
 
 
-if(!isset($_SESSION['username'])) {
-	echo "<script>alert('Silahkan login terlebih dahulu.');window.location='paneladmin/index.php';</script>";
-} else {
-	echo "<script>alert('Produk telah masuk ke keranjang belanja anda.');window.location='keranjang.php';</script>";
-}
+// if(!isset($_SESSION['username'])) {
+// 	echo "<script>alert('Silahkan login terlebih dahulu.');window.location='paneladmin/index.php';</script>";
+// } else {
+// 	echo "<script>alert('Produk telah masuk ke keranjang belanja anda.');window.location='keranjang.php';</script>";
+// }
 
-// echo "<script>alert('Barang berhasil di tambahkan ke keranjang.');window.location='keranjang.php';</script>";
+echo "<script>alert('Barang berhasil di tambahkan ke keranjang.');window.location='keranjang.php';</script>";
 
 ?>
