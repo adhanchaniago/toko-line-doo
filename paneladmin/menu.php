@@ -41,7 +41,7 @@
             <ul class="sub">
               <li><a href="?p=produk">Produk</a></li>
               <li><a href="?p=kategori">Kategori Produk</a></li>
-              <li><a href="?p=sub-produk">Sub Produk</a></li>
+              <li><a href="?p=pembelian">Pembelian</a></li>
               <li><a href="?p=jasa">Jasa Pengiriman</a></li>
               <li><a href="?p=ongkir">Ongkos Kirim</a></li>
             </ul>

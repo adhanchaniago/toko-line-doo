@@ -42,6 +42,12 @@
     require_once 'modul/kategori/kategori.php';
   } else if($_GET['p'] == 'admin') {
     require_once 'modul/admin/admin.php';
+  } else if($_GET['p'] == 'pembelian') {
+    require_once 'modul/pembelian/pembelian.php';
+  } else if($_GET['p'] == 'detail') {
+    require_once 'modul/pembelian/detail.php';
+  } else if($_GET['p'] == 'pembayaran') {
+    require_once 'modul/pembelian/pembayaran.php';
   } else {
     require_once '404.php';
   }
