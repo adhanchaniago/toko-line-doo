@@ -1,24 +1,35 @@
+<!--A Design by W3layouts 
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
 <?php 
 session_start();
 require_once 'config/koneksi.php';
 require_once 'config/functions.php';
 
-// jika pengguna belum login, tetapi ingin mengakses riwayat.php
-if(!isset($_SESSION['username'])) {
-	header("Location: paneladmin/index.php");
-	exit;
+// $idH = $_GET['id'];
+// query untuk jumlah pencarian di produk.php
+// query untuk menampilkan kategori di bagian titile html
+// $kategoriH = mysqli_query($conn, "SELECT * FROM tb_kategori WHERE id_kategori = $idH");
+// $judulH = mysqli_fetch_assoc($kategoriH);
+
+$keyword = $_GET['keyword'];
+// $kategoriB = "SELECT * FROM tb_barang WHERE kd_barang = '$keyword'";
+$semuaData = [];
+$ambil = mysqli_query($conn, "SELECT * FROM tb_barang WHERE nama LIKE '%$keyword%'") or die(mysqli_error($conn));
+while($pecah = mysqli_fetch_assoc($ambil)) {
+	$semuaData[] = $pecah;
 }
-
-$queryAmbilUser = mysqli_query($conn, "SELECT * FROM tb_user") or die(mysqli_error($conn));
-$rowUser = mysqli_fetch_assoc($queryAmbilUser);
-$_SESSION['id_user'] = $rowUser['id_user'];
-
-
+// echo "<pre>";
+// var_dump($semuaData);
+// echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Riwayat Belanja | TokoLineDoo</title>
+<title><?= $judulH['nama_kategori'] ?> | TokoLineDoo</title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
@@ -32,6 +43,7 @@ $_SESSION['id_user'] = $rowUser['id_user'];
 <script src="js/jquery.min.js"></script>
 
 
+<!--script-->
 </head>
 <body> 
 	<!--header-->
@@ -76,7 +88,7 @@ $_SESSION['id_user'] = $rowUser['id_user'];
 			<div class="container">
 				<div class="header-bottom-left">
 					<div class="logo">
-						<a href="index.php"><img src="images/logo.png" alt=" " /></a>
+						<a href="<?= base_url(); ?>"><img src="images/logo.png" alt=" " /></a>
 					</div>
 					<div class="search">
 						<input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}" >
@@ -95,7 +107,7 @@ $_SESSION['id_user'] = $rowUser['id_user'];
 							<?php else : ?>
 							<ul class="login">
 								<li><a href="<?= base_url('paneladmin/index.php'); ?>"><span> </span>MASUK</a></li> |
-								<li ><a href="register.php">DAFTAR</a></li>
+								<li ><a href="<?= base_url('paneladmin/index.php'); ?>">DAFTAR</a></li>
 							</ul>
 						<?php endif; ?>
 						<!-- <div class="cart"><a href="#"><span> </span>KERANJANG</a></div> -->
@@ -107,63 +119,64 @@ $_SESSION['id_user'] = $rowUser['id_user'];
 		</div>
 	</div>
 	<!---->
-	<div class="container"> 
+	<!-- start content -->
+	<div class="container">
 		
-		<div class="register">
-			<div class="products">
-	   		<h5 class="latest-product"><i class="fa fa-shopping-cart"></i> RIWAYAT BELANJA <?= $_SESSION['nama_lengkap']; ?></h5>	
-	     	  <!-- <a class="view-all" href="product.html">VIEW ALL<span> </span></a> 		      -->
-	    </div>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>No.</th>
-					<th>Tanggal</th>
-					<th>Status</th>
-					<th>Total</th>
-					<th>Opsi</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php 
-				$no = 1;
-				$id_user = $_SESSION['id_user'];
-				$queryRiwayat = mysqli_query($conn, "SELECT * FROM tb_pembelian WHERE id_user = $id_user") or die(mysqli_error($conn));
-				while($rowRi = mysqli_fetch_assoc($queryRiwayat)) {
-
-				?>
-				<tr>
-					<td><?= $no++; ?></td>
-					<td><?= $rowRi['tgl_pembelian']; ?></td>
-					<td>
-						<?= $rowRi['status_pembelian']; ?><br>
-						<?php if(!empty($rowRi['resi_pengiriman'])) : ?>
-						No. Resi : <?= $rowRi['resi_pengiriman']; ?>
-						</td>
-					<?php endif; ?>
-					<td><?= $rowRi['total_pembelian']; ?></td>
-					<td>
-						<a href="nota.php?id=<?= $rowRi['id_pembelian']; ?>" class="btn btn-success">Nota</a>
-						<?php if($rowRi['status_pembelian'] == 'Barang Dikirim') : ?>
-						<a href="lihat_pembayaran.php?id=<?= $rowRi['id_pembelian']; ?>" class="btn btn-info">Lihat Pembayaran</a>
-						<?php else : ?>
-							<a href="pembayaran.php?id=<?= $rowRi['id_pembelian']; ?>" class="btn btn-warning">Pembayaran</a>
-					<?php endif; ?>
-					</td>
-				</tr>
-				<?php } ?>
-			</tbody>
-		</table>
+	<div class="women-product">
+		<div class=" w_content">
+			<div class="women">
+				<!-- <?php 
+				$jmlH = mysqli_num_rows(mysqli_query($conn, $kategoriB));
+				?> -->
+				<?php if(empty($semuaData)) : ?>
+				<h4><b><?= $keyword; ?></b> Tidak ditemukan - <span><!-- <?= $jmlH; ?> --> items</span> </h4>
+				<?php else: ?>
+					<h4><b><?= $keyword; ?></b> Barang Ditemukan - <span><!-- <?= $jmlH; ?> --> items</span> </h4>
+				<?php endif; ?>
+				<ul class="w_nav">
+					<li>Sort : </li>
+			     	<li><a class="active" href="#">popular</a></li> |
+			     	<li><a href="#">new </a></li> |
+			     	<li><a href="#">discount</a></li> |
+			     	<li><a href="#">price: Low High </a></li> 
+			     <div class="clearfix"> </div>	
+			     </ul>
+			     <div class="clearfix"> </div>	
+			</div>
 		</div>
-		   <div class="sub-cate">
-				<?php include 'menu.php'; ?>     
+		<!-- grids_of_4 -->
+		<div class="grid-product">
+		
+		<?php foreach($semuaData as $key => $value) : ?>
+		  <div class="product-grid">
+			<div class="content_box"><a href="single.php?id=<?= $value['kd_barang']; ?>">
+			   	<div class="left-grid-view grid-view-left">
+			   	   	 <img src="paneladmin/modul/produk/img/<?= $value['foto']; ?>" class="img-responsive watch-right" alt=""/>
+				   	   	<div class="mask">
+	                        <div class="info">Quick View</div>
+			            </div>
+				   	  </a>
+				</div>
+				    <h5><a href="single.php?id=<?= $value['kd_barang']; ?>"><?= $value['nama']; ?></a></h5>
+				     <p>It is a long established fact that a reader</p>
+				     Rp. <?= number_format($value['hrg_jual'],2,",","."); ?>
+			   	</div>
+              </div>
+            <?php endforeach; ?>
+			<div class="clearfix"> </div>
+		</div>
 	</div>
+	<div class="sub-cate">
+				<?php require_once 'menu.php'; ?>	
+			</div>
+	<div class="clearfix"> </div>
+</div>
 	<!---->
 	<div class="footer">
 		<div class="footer-top">
 			<div class="container">
 				<div class="latter">
-					<h6>NEWS-LETTER</h6>
+					<h6>SURAT-BERITA</h6>
 					<div class="sub-left-right">
 						<form>
 							<input type="text" value="Enter email here"onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter email here';}" />
@@ -192,7 +205,7 @@ $_SESSION['id_user'] = $rowUser['id_user'];
 						<?php 
 						$menu = mysqli_query($conn, "SELECT * FROM tb_kategori") or die(mysqli_error($conn));
 						while($row = mysqli_fetch_assoc($menu)) { ?>
-						<li><a href="#"><?= $row['nama_kategori']; ?></a></li>
+						<li><a href="product.php?id=<?= $row['id_kategori']; ?>"><?= $row['nama_kategori']; ?></a></li>
 						<?php } ?>
 					</ul>
 				</div>

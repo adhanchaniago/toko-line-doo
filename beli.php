@@ -10,6 +10,11 @@ if(isset($_SESSION['keranjang'][$id_barang])) {
 	$_SESSION['keranjang'][$id_barang] = 1;
 }
 
+if(!isset($_GET['id'])) {
+	header("Location: paneladmin/index.php");
+	exit;
+}
+
 
 // if(!isset($_SESSION['username'])) {
 // 	echo "<script>alert('Silahkan login terlebih dahulu.');window.location='paneladmin/index.php';</script>";

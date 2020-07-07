@@ -30,7 +30,8 @@ session_start();
     <div class="col-lg-12">
       <div class="content-panel">
         <h4><i class="fa fa-angle-right"></i> Data Pembelian</h4>
-        <table class="table table-bordered table-striped table-condensed" id="datatables">
+        <a href="media.php?p=lihat_laporan" class="btn btn-primary">Laporan</a>
+        <table class="table table-bordered table-striped table-condensed">
 				<thead>
 					<tr>
 						<th>No</th>
@@ -56,7 +57,9 @@ session_start();
 						<td><?= $detail['total_pembelian']; ?></td>
 						<td>
 							<a href="media.php?p=detail&id=<?= $detail['id_pembelian']; ?>" class="btn btn-primary">Detail</a>
+							<?php if($detail['status_pembelian'] !== 'pending') : ?>
 							<a href="media.php?p=pembayaran&id=<?= $detail['id_pembelian']; ?>" class="btn btn-info">Pembayaran</a>
+							<?php endif; ?>
 						</td>
 					</tr>
 					<?php } ?>

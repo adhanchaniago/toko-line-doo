@@ -156,10 +156,10 @@ if(isset($_POST['beli'])) {
 				 </div>
 
 				 </form>
-				 <h6>Stok <?= number_format($gbrZ['jumlah']); ?></h6>
+				 <h6>Stok <?= number_format($gbrZ['jumlah_brg']); ?></h6>
 				 <form action="" method="post">
 				 	<div class="input-group col-md-4">
-			      <input type="number" name="jumlah" min="1" max="<?= $gbrZ['jumlah']; ?>" class="form-control">
+			      <input type="number" name="jumlah" min="1" max="<?= $gbrZ['jumlah_brg']; ?>" class="form-control">
 			      <span class="input-group-btn">
 			        <button type="submit" name="beli" class="btn btn-primary" type="button">Beli</button>
 			      </span>

@@ -48,6 +48,10 @@
     require_once 'modul/pembelian/detail.php';
   } else if($_GET['p'] == 'pembayaran') {
     require_once 'modul/pembelian/pembayaran.php';
+  } else if($_GET['p'] == 'lihat_pembayaran') {
+    require_once 'modul/pembelian/lihat_pembayaran.php'; 
+  } else if($_GET['p'] == 'lihat_laporan') {
+    require_once 'modul/pembelian/lihat_laporan.php';
   } else {
     require_once '404.php';
   }

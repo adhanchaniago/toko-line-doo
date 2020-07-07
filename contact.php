@@ -3,11 +3,27 @@ session_start();
 require_once 'config/koneksi.php';
 require_once 'config/functions.php';
 
+if(isset($_POST['kirim'])) {
+	$nama = $_POST['nama'];
+	$email = $_POST['email'];
+	$pesan = $_POST['pesan'];
+	$admin = 'ciuyy12@gmail.com';
+
+	$pengirim = "Dari : " . $nama . '<'.$email.'>';
+
+	if(mail($admin, $pesan, $pengirim)) {
+		echo "<script>alert('Pesan anda berhasil di kirim.');window.location='contact.php';</script>";
+	} else {
+		echo "<script>alert('Pesan anda gagal di kirim.');window.location='contact.php';</script>";
+	}
+	
+}
+
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>TokoLineDoo | Website Jual Beli Online</title>
+<title>Kontak Kami | TokoLineDoo</title>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
@@ -19,7 +35,8 @@ require_once 'config/functions.php';
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
 <!--//fonts-->
 <script src="js/jquery.min.js"></script>
-<!--script-->
+
+
 </head>
 <body> 
 	<!--header-->
@@ -64,18 +81,12 @@ require_once 'config/functions.php';
 			<div class="container">
 				<div class="header-bottom-left">
 					<div class="logo">
-						<a href="index.html"><img src="images/logo.png" alt=" " /></a>
+						<a href="index.php"><img src="images/logo.png" alt=" " /></a>
 					</div>
-					<!-- <div class="search">
+					<div class="search">
 						<input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}" >
 						<input type="submit"  value="SEARCH">
 
-					</div> -->
-					<div class="search">
-						<form action="pencarian.php" method="get">
-							<input type="text" name="keyword">
-							<button type="submit" class="btn btn-primary">Cari</button>
-						</form>
 					</div>
 					<div class="clearfix"> </div>
 				</div>
@@ -92,8 +103,8 @@ require_once 'config/functions.php';
 								<li ><a href="register.php">DAFTAR</a></li>
 							</ul>
 						<?php endif; ?>
-						<div class="cart"><a href="<?= base_url('keranjang.php'); ?>"><span> </span>KERANJANG</a></div>
-						<!-- <div class="cart"><a href="<?= base_url('keranjang.php'); ?>"><span> </span></a></div> -->
+						<!-- <div class="cart"><a href="#"><span> </span>KERANJANG</a></div> -->
+						<div class="cart"><a href="<?= base_url('paneladmin/index.php'); ?>"><span> </span></a></div>
 					<div class="clearfix"> </div>
 				</div>
 				<div class="clearfix"> </div>	
@@ -101,24 +112,47 @@ require_once 'config/functions.php';
 		</div>
 	</div>
 	<!---->
-	<div class="container">
-		<div class="shoes-grid">
-			<?php include 'content.php'; ?> 
-			</div>  
-			   <div class="sub-cate">
-				<?php include 'menu.php'; ?>       	         
+	<div class="container"> 
+		
+		<div class="register">
+			<div class="products">
+	   		<h5 class="latest-product"><i class="fa fa-shopping-cart"></i> KONTAK KAMI</h5>
+	    </div>
+			<div class="row">
+				<div class="col-md-12">
+					<form action="" method="post">
+						<div class="form-group">
+							<label for="nama">Nama</label>
+							<input type="text" name="nama" id="nama" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="email">Email</label>
+							<input type="text" name="email" id="email" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="pesan">Pesan</label>
+							<textarea name="pesan" id="pesan" class="form-control" cols="30" rows="10"></textarea>
+						</div>
+						<div class="form-group">
+							<button type="submit" name="kirim" class="btn btn-primary">Kirim</button>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
-	
+		   <div class="sub-cate">
+				<?php include 'menu.php'; ?>     
+	</div>
 	<!---->
 	<div class="footer">
 		<div class="footer-top">
 			<div class="container">
 				<div class="latter">
-					<h6>SURAT-BERITA</h6>
+					<h6>NEWS-LETTER</h6>
 					<div class="sub-left-right">
 						<form>
-							<input type="text" value="Enter email here"onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Masukan email anda';}" />
-							<input type="submit" value="BERLANGGANAN" />
+							<input type="text" value="Enter email here"onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter email here';}" />
+							<input type="submit" value="SUBSCRIBE" />
 						</form>
 					</div>
 					<div class="clearfix"> </div>
@@ -143,7 +177,7 @@ require_once 'config/functions.php';
 						<?php 
 						$menu = mysqli_query($conn, "SELECT * FROM tb_kategori") or die(mysqli_error($conn));
 						while($row = mysqli_fetch_assoc($menu)) { ?>
-						<li><a href="product.php?id=<?= $row['id_kategori']; ?>"><?= $row['nama_kategori']; ?></a></li>
+						<li><a href="#"><?= $row['nama_kategori']; ?></a></li>
 						<?php } ?>
 					</ul>
 				</div>
