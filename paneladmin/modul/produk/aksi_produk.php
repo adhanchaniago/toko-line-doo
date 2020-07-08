@@ -81,33 +81,54 @@ if($act === 'hapus') {
 	$hrg_jual = htmlspecialchars($_POST['hrg_jual']);
 	$terjual = htmlspecialchars($_POST['terjual']);
 	$headline = htmlspecialchars($_POST['headline']);
+	$stok = htmlspecialchars($_POST['stok']);
 
 	// cek gambar
-	$namaFoto = $_FILES['foto']['name'];
-	$tmpFoto = $_FILES['foto']['tmp_name'];
+	$namaFotoAll = $_FILES['foto']['name'];
+	$tmpFotoAll = $_FILES['foto']['tmp_name'];
 
-	$namaFotoValid = ['jpg','jpeg','png'];
-	$ektensiGambar = explode('.', $namaFoto);
-	$ektensiGambar = strtolower(end($ektensiGambar));
-	if(!in_array($ektensiGambar, $namaFotoValid)) {
-		echo "<script>alert('Yang anda upload bukan gambar!')</script>";
-		return false;
+	move_uploaded_file($tmpFotoAll[0], 'img/' . $namaFotoAll[0]);
+
+	mysqli_query($conn, "INSERT INTO tb_barang (nama, id_kategori, deskripsi, jumlah_brg, headline,  tgl_masuk, hrg_jual, terjual, foto, stok_barang) VALUES ('$nama', '$id_kategori', '$deskripsi', '$jumlah', '$headline', '$tgl_masuk', '$hrg_jual', '$terjual', '$namaFotoAll[0]', '$stok')") or die(mysqli_error($conn));
+
+	// mendapatkan id barusan
+	$id_barang = mysqli_insert_id($conn);
+
+	foreach($namaFotoAll as $key => $tiapNama) {
+		$lokasiFoto = $tmpFotoAll[$key];
+		move_uploaded_file($lokasiFoto, 'img/'. $tiapNama);
+
+		mysqli_query($conn, "INSERT INTO tb_produk_foto (kd_barang, nama_produk_foto) VALUES ('$id_barang', '$tiapNama')") or die(mysqli_error($conn));
 	}
 
-	$namaFileBaru = uniqid();
-	$namaFileBaru .= '.';
-	$namaFileBaru .= $ektensiGambar;
+	echo "<script>alert('Data Berhasil Ditambahkan.');window.location='../../media.php?p=produk';</script>";
 
-	move_uploaded_file($tmpFoto, 'img/' . $namaFileBaru);
+	// echo "<pre>";
+	// var_dump($_FILES['foto']);
+	// echo "</pre>";
 
-	$query = "INSERT INTO tb_barang (nama, id_kategori, deskripsi, jumlah, headline,  tgl_masuk, hrg_jual, terjual, foto) VALUES ('$nama', '$id_kategori', '$deskripsi', '$jumlah', '$headline', '$tgl_masuk', '$hrg_jual', '$terjual', '$namaFileBaru')";
-	mysqli_query($conn, $query) or die(mysqli_error($conn));
-	if($query) {
-		echo "<script>alert('Data Berhasil Ditambahkan.');window.location='../../media.php?p=produk';</script>";
-	} else {
-		echo "<script>alert('Data Gagal Ditambahkan.');window.location='../../media.php?p=produk';</script>";
-	}
-	return $namaFileBaru;
+	// $namaFotoValid = ['jpg','jpeg','png'];
+	// $ektensiGambar = explode('.', $namaFoto);
+	// $ektensiGambar = strtolower(end($ektensiGambar));
+	// if(!in_array($ektensiGambar, $namaFotoValid)) {
+	// 	echo "<script>alert('Yang anda upload bukan gambar!')</script>";
+	// 	return false;
+	// }
+
+	// $namaFileBaru = uniqid();
+	// $namaFileBaru .= '.';
+	// $namaFileBaru .= $ektensiGambar;
+
+	// move_uploaded_file($tmpFoto, 'img/' . $namaFileBaru);
+
+	// $query = "INSERT INTO tb_barang (nama, id_kategori, deskripsi, jumlah, headline,  tgl_masuk, hrg_jual, terjual, foto) VALUES ('$nama', '$id_kategori', '$deskripsi', '$jumlah', '$headline', '$tgl_masuk', '$hrg_jual', '$terjual', '$namaFileBaru')";
+	// mysqli_query($conn, $query) or die(mysqli_error($conn));
+	// if($query) {
+	// 	echo "<script>alert('Data Berhasil Ditambahkan.');window.location='../../media.php?p=produk';</script>";
+	// } else {
+	// 	echo "<script>alert('Data Gagal Ditambahkan.');window.location='../../media.php?p=produk';</script>";
+	// }
+	// return $namaFileBaru;
 
 } else if($_GET['act'] == 'edit') {
 	require_once 'function.php';
@@ -153,7 +174,22 @@ if($act === 'hapus') {
 	// return mysqli_affected_rows($conn);
 
 
- }	
+ } else if($_GET['act'] == 'hapusfotoproduk') {
+ 	$id_produk = $_GET['idproduk'];
+ 	$id_foto = $_GET['idfoto'];
+
+ 	$ambilFoto = mysqli_query($conn, "SELECT * FROM tb_produk_foto WHERE kd_barang = $id_produk") or die(mysqli_error($conn));
+ 	$pecahFoto = mysqli_fetch_assoc($ambilFoto);
+ 	$singleFoto = $pecahFoto['nama_produk_foto'];
+ 	if(file_exists('img/' . $singleFoto)) {
+ 		unlink('img/' . $singleFoto);
+ 	}
+
+ 	mysqli_query($conn, "DELETE FROM tb_produk_foto WHERE id_produk_foto = $id_foto") or die(mysqli_error($conn));
+ 	// echo "<script>alert('Foto Berhasil Dihapus.');window.location='media.php?p=produk&aksi=detail&id=$id_produk';</script>";
+ 	echo "<script>alert('Data Berhasil Diubah.');window.location='../../media.php?p=produk&aksi=detail&id=$id_produk';</script>";
+
+ }
 
 }
 ?>

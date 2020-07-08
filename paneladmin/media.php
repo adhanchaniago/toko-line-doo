@@ -320,6 +320,9 @@ if(empty($_SESSION['username']) AND empty($_SESSION['passuser'])) {
   <script src="assets/DataTables/datatables.min.js"></script>
   <script>
     $('#datatables').DataTable();
+    $('#tombolTambahGambar').click(function() {
+      $('.input-tambah').append(`<input type="file" class="default input-tambah" name="foto[]">`);
+    });
   </script>
 
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>

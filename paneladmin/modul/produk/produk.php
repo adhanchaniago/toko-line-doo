@@ -117,10 +117,11 @@ session_start();
                <td><?= $ktg['nama_kategori']; ?></td>
                <td><?= number_format($row['hrg_jual']); ?></td>
                <td><?= date('d-M-Y', strtotime($row['tgl_masuk'])) ; ?></td>
-               <td><?= $row['jumlah']; ?></td>
+               <td><?= $row['jumlah_brg']; ?></td>
                <td><?= yn($row['headline']); ?></td>
                <td colspan="2">
                  <a href="?p=produk&aksi=edit&id=<?= $row['kd_barang']; ?>" class="btn btn-info">Edit</a>
+                 <a href="?p=produk&aksi=detail&id=<?= $row['kd_barang']; ?>" class="btn btn-success">Detail</a>
                  <!-- <button type="button" class="btn btn-info">Edit</button> -->
                  <a href="modul/produk/aksi_produk.php?act=hapus&id=<?= $row['kd_barang']; ?>" class="btn btn-danger" onclick="return confirm('Yakin ?')">Hapus</a>
                </td>
@@ -199,9 +200,15 @@ case 'tambah' :
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="col-sm-2 col-sm-2 control-label">Stok Barang</label>
+                  <div class="col-sm-10">
+                    <input class="form-control" id="stok" name="stok" type="text">
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="col-sm-2 col-sm-2 control-label">Foto</label>
                   <div class="col-md-9">
-                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <!-- <div class="fileupload fileupload-new input-tambah" data-provides="fileupload">
                       <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
                         <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" alt="" />
                       </div>
@@ -210,17 +217,21 @@ case 'tambah' :
                         <span class="btn btn-theme02 btn-file">
                           <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
                         <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                        <input type="file" class="default" name="foto">
+                        <input type="file" class="default input-tambah" name="foto[]">
                         </span>
                         <a href="advanced_form_components.html#" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Remove</a>
                       </div>
+                    </div> -->
+                    <div class="input-tambah">
+                    <input type="file" class="default" name="foto[]">
                     </div>
-                    <span class="label label-info">NOTE!</span>
+                    <button type="button" id="tombolTambahGambar" class="btn btn-primary"><i class="fa fa-plus"></i></button>
+                    <!-- <span class="label label-info">NOTE!</span>
                     <span>
                       Attached image thumbnail is
                       supported in Latest Firefox, Chrome, Opera,
                       Safari and Internet Explorer 10 only
-                      </span>
+                      </span> -->
                   </div>
                 </div>
                 <div class="form-group">
@@ -282,7 +293,7 @@ $se = mysqli_fetch_assoc($sql_edit);
                 <div class="form-group">
                   <label class="col-sm-2 col-sm-2 control-label">Jumlah</label>
                   <div class="col-sm-10">
-                    <input class="form-control" id="jumlah" name="jumlah" type="text" value="<?= $se['jumlah']; ?>">
+                    <input class="form-control" id="jumlah" name="jumlah" type="text" value="<?= $se['jumlah_brg']; ?>">
                   </div>
                 </div>
                 <div class="form-group">
@@ -290,6 +301,12 @@ $se = mysqli_fetch_assoc($sql_edit);
                   <div class="col-sm-10">
                       <input type="radio" name="headline" value="Y" <?php if($se['headline'] == 'Y') echo 'checked'?>> Ya
                       <input type="radio" name="headline" value="T" <?php if($se['headline'] == 'T') echo 'checked'?>> Tidak
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 col-sm-2 control-label">Stok</label>
+                  <div class="col-sm-10">
+                    <input class="form-control" id="stok" name="stok" type="text" value="<?= $se['stok_barang']; ?>">
                   </div>
                 </div>
                 <div class="form-group">
@@ -356,6 +373,102 @@ $se = mysqli_fetch_assoc($sql_edit);
             </div>
           </div>
           <!-- col-lg-12-->
+</div>
+
+<?php       
+break;
+case 'detail' :
+$id_produk = $_GET['id'];
+
+$tampilBarangId = mysqli_query($conn, "SELECT * FROM tb_barang INNER JOIN tb_kategori ON tb_barang.id_kategori = tb_kategori.id_kategori WHERE kd_barang = $id_produk") or die(mysqli_error($conn));
+$pecahBarang = mysqli_fetch_assoc($tampilBarangId);
+
+// mengambil foto
+$semuaBarang = [];
+$tampilProdukFoto = mysqli_query($conn, "SELECT * FROM tb_produk_foto WHERE kd_barang = $id_produk") or die(mysqli_error($conn));
+while($ambilFoto = mysqli_fetch_assoc($tampilProdukFoto)) {
+  $semuaBarang[] = $ambilFoto;
+}
+//  echo "<pre>";
+// var_dump($semuaBarang);
+//  echo "<pre>";
+
+?>
+<h3><i class="fa fa-angle-right"></i> Form Components</h3>
+<!-- BASIC FORM ELELEMNTS -->
+<div class="row mt">
+  <div class="col-lg-12">
+    <div class="form-panel">
+      <h4 class="mb"><i class="fa fa-angle-right"></i> Detail Produk</h4>
+  
+      <div class="row">
+        <div class="col-lg-12">
+          <table class="table">
+            <tr>
+              <th>Kategori</th>
+              <td><?= $pecahBarang['nama_kategori']; ?></td>
+            </tr>
+            <tr>
+              <th>Barang</th>
+              <td><?= $pecahBarang['nama']; ?></td>
+            </tr>
+            <tr>
+              <th>Harga</th>
+              <td><?= $pecahBarang['hrg_jual']; ?></td>
+            </tr>
+            <tr>
+              <th>Stok</th>
+              <td><?= $pecahBarang['stok_barang']; ?></td>
+            </tr>
+            <tr>
+              <th>Deskripsi</th>
+              <td><?= $pecahBarang['deskripsi']; ?></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <?php foreach($semuaBarang as $key => $value) : ?>
+        <div class="col-md-4">
+          <?php if($key === 0) : ?>
+          <img src="modul/produk/img/<?= $value['nama_produk_foto']; ?>" width="200"><br>
+          <span class="label label-info">NOTE!</span>
+          <span>
+            ini adalah foto produk utama anda.
+            </span>
+          <?php else: ?>
+          <img src="modul/produk/img/<?= $value['nama_produk_foto']; ?>" width="200">
+          <!-- <a href="media.php?p=hapusfotoproduk&idfoto=<?= $value['id_produk_foto']; ?>&idproduk=<?= $id_produk; ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i></a> -->
+          <a href="modul/produk/aksi_produk.php?act=hapusfotoproduk&idfoto=<?= $value['id_produk_foto']; ?>&idproduk=<?= $id_produk; ?>" onclick="return confirm('Yakin')" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+          <?php endif; ?>
+        </div>
+        <?php endforeach; ?>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <form action="" method="post" enctype="multipart/form-data">
+            <label for="tambahFoto">Tambah Foto</label>
+            <input type="file" name="tambahFoto" id="tambahFoto">
+            <button type="submit" name="tambahFoto"><i class="fa fa-plus"></i></button>
+          </form>
+          <?php 
+          if(isset($_POST['tambahFoto'])) {
+            $tambahFoto = $_FILES['tambahFoto']['name'];
+            $tmpTambahFoto = $_FILES['tambahFoto']['tmp_name'];
+
+            move_uploaded_file($tmpTambahFoto, 'modul/produk/img/' . $tambahFoto);
+            mysqli_query($conn, "INSERT INTO tb_produk_foto (kd_barang, nama_produk_foto) VALUES ('$id_produk', '$tambahFoto')") or die(mysqli_error($conn));
+            echo "<script>alert('Foto Berhasil Ditambahkan.');window.location='media.php?p=produk&aksi=detail&id=$id_produk';</script>";
+          }
+          ?>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- col-lg-12-->
 </div>
 
 <?php

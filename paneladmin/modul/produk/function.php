@@ -10,6 +10,7 @@ function editBrg() {
 	$hrg_jual = htmlspecialchars($_POST['hrg_jual']);
 	$terjual = htmlspecialchars($_POST['terjual']);
 	$headline = htmlspecialchars($_POST['headline']);
+	$stok = htmlspecialchars($_POST['stok']);
 	$fotoLama = $_POST['fotoLama'];
 
 	// cek gambar
@@ -24,12 +25,13 @@ function editBrg() {
 							nama = '$nama',
 							id_kategori = '$id_kategori',
 							deskripsi = '$deskripsi',
-							jumlah = '$jumlah',
+							jumlah_brg = '$jumlah',
 							headline = '$headline',
 							tgl_masuk = '$tgl_masuk',
 							hrg_jual = '$hrg_jual',
 							terjual = '$terjual',
-							foto = '$foto'
+							foto = '$foto',
+							stok_barang = '$stok'
 							WHERE kd_barang = $kd_barang
 						";
 	mysqli_query($conn, $query) or die(mysqli_error($conn));

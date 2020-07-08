@@ -76,10 +76,10 @@ if(!empty($_SESSION['username']) AND !empty($_SESSION['passuser'])) {
         <h2 class="form-login-heading">Login Sekarang</h2>
         <div class="login-wrap">
           <div class="form-group">
-          <input type="text" name="username" class="form-control" placeholder="User ID" autofocus>
+          <input type="text" name="username" class="form-control" placeholder="User ID" autofocus value="ridho008">
           </div>
           <div class="form-group">
-          <input type="password" name="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control" placeholder="Password" value="123">
           </div>
           <div class="form-group">
             <input type="checkbox" name="remember" value="remember-me"> Ingat Saya
