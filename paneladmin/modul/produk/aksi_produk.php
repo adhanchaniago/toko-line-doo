@@ -96,6 +96,12 @@ if($act === 'hapus') {
 
 	foreach($namaFotoAll as $key => $tiapNama) {
 		$lokasiFoto = $tmpFotoAll[$key];
+
+		// jika nama foto sama, yg upload ke tb_brang sama dengan tb_produk_foto, acak namanya.
+		if($namaFotoAll == $tiapNama) {
+			rand(00000000, 99999999);
+		}
+
 		move_uploaded_file($lokasiFoto, 'img/'. $tiapNama);
 
 		mysqli_query($conn, "INSERT INTO tb_produk_foto (kd_barang, nama_produk_foto) VALUES ('$id_barang', '$tiapNama')") or die(mysqli_error($conn));
